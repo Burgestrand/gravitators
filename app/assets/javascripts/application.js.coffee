@@ -12,6 +12,7 @@
 #
 #= require serenade
 #= require easeljs
+#= require keymaster
 #= require ./utils
 #= require ./monkey_patches
 #= require_directory ./helpers

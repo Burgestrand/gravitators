@@ -12,8 +12,11 @@ class @Game extends Serenade.Model
       "#{integer.lpad(2)}.#{decimal.lpad(2)}"
 
   @property "paused"
-    get: -> c.Ticker.getPaused()
-    set: (bool) -> c.Ticker.setPaused(bool)
+    get: ->
+      c.Ticker.getPaused()
+    set: (bool) ->
+      key.setScope({ false: "playing", true: "paused" }[bool])
+      c.Ticker.setPaused(bool)
 
   constructor: (container) ->
     @view = Serenade.render("game", this, this)
@@ -23,10 +26,11 @@ class @Game extends Serenade.Model
     @ships = new Container()
     @stage.addChild(@world.container, @ships.container)
 
-    @join(new Player("W", "A", "D", "space"))
+    @join(window.player1 = new Player("W", "A", "D", "space"))
 
     c.Ticker.setFPS(60)
     c.Ticker.addListener(this)
+    @paused = false
 
     container.appendChild(@view)
 
@@ -38,7 +42,7 @@ class @Game extends Serenade.Model
 
   tick: (delta, paused) ->
     @fps = c.Ticker.getMeasuredFPS()
-    @redraw()
+    @redraw(delta)
 
   redraw: ->
-    @stage.update()
+    @stage.update(arguments...)

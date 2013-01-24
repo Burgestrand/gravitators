@@ -1,3 +1,9 @@
+Math.deg2rad = (degrees) ->
+  degrees * (Math.PI / 180)
+
+Math.rad2deg = (radians) ->
+  radians * (180 / Math.PI)
+
 round = Math.round
 Math.round = (value, decimals = 0) ->
   factor = Math.pow(10, decimals)
