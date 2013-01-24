@@ -10,4 +10,16 @@
 # WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 # GO AFTER THE REQUIRES BELOW.
 #
-#= require_tree .
+#= require serenade
+#= require easeljs
+#= require ./utils
+#= require ./monkey_patches
+#= require_directory ./models
+#= require_directory ./views
+#= require_directory ./game
+#= require_self
+
+@c = createjs
+
+at document, "DOMContentLoaded", =>
+  @game = new Game($("#stage"))

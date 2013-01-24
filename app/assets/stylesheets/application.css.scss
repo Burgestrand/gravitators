@@ -8,6 +8,72 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
+ *= require normalize-rails
  *= require_self
  *= require_tree .
  */
+
+@import "bourbon";
+
+$height: 576px;
+$width: 1024px;
+
+*
+{
+  @include box-sizing(border-box);
+}
+
+body
+{
+  color: #333;
+  font: 100.01%/1.25 "Helvetica Neue", "Helvetica", sans-serif;
+}
+
+.container
+{
+  @include box-sizing(content-box);
+
+  margin: 0 auto;
+  padding: 16px;
+  position: relative;
+  width: $width;
+}
+
+#stage
+{
+  @include box-shadow(rgba(0, 0, 0, 0.4) 0 1px 3px);
+
+  border: 1px solid #DDD;
+  height: $height;
+  width: $width;
+}
+
+.info
+{
+  color: #999;
+  list-style: none;
+  padding: 0;
+  position: absolute;
+  left: 16px + 16px;
+  top: 16px;
+}
+
+.console
+{
+  color: #666;
+  padding: 1em;
+  position: relative;
+
+  font:
+  {
+    weight: bold;
+    family: monospace;
+  }
+
+  ol
+  {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}

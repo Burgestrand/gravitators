@@ -1,0 +1,5 @@
+.console
+  ol
+    - collection @messages
+      li[class=@type]
+        "[" @timestamp "] " @message
