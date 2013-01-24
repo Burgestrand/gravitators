@@ -3,7 +3,10 @@ class @Game extends Serenade.Model
 
   @property "fps"
     format: (value) ->
-      Math.round(value or 0, 2)
+      value = Math.round(value or 0, 2)
+      integer = Math.floor(value)
+      decimal = Math.round((value - integer) * 100)
+      "#{integer.lpad(2)}.#{decimal.lpad(2)}"
 
   constructor: (@element) ->
     @stage = new c.Stage(@element)
