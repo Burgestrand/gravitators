@@ -23,13 +23,15 @@ class @Game extends Serenade.Model
     @ships = new Container()
     @stage.addChild(@world.container, @ships.container)
 
-    ship = new Ship()
-    @ships.push(ship)
+    @join(new Player("W", "A", "D", "space"))
 
     c.Ticker.setFPS(60)
     c.Ticker.addListener(this)
 
     container.appendChild(@view)
+
+  join: (player) ->
+    @ships.push(player)
 
   debug: (message, type = "debug") ->
     @messages.unshift(DebugMessage.create(message, type))
