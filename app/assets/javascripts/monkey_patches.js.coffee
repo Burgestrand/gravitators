@@ -1,3 +1,6 @@
+Object.values = (object) ->
+  object[key] for key in Object.keys(object)
+
 Math.deg2rad = (degrees) ->
   degrees * (Math.PI / 180)
 
