@@ -7,3 +7,10 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
 end
+
+group :development do
+  # LiveReload
+  gem "guard-livereload" # websocket server
+  gem "rb-fsevent"       # faster filesystem events for guard
+  gem "rack-livereload"  # automatically include livereload.js
+end
