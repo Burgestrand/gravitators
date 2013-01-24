@@ -1,4 +1,7 @@
 class @Game extends Serenade.Model
+  @property "width", value: 1024, format: Formatter.px
+  @property "height", value: 576, format: Formatter.px
+
   @collection "messages"
 
   @property "fps"
@@ -8,20 +11,32 @@ class @Game extends Serenade.Model
       decimal = Math.round((value - integer) * 100)
       "#{integer.lpad(2)}.#{decimal.lpad(2)}"
 
-  constructor: (@element) ->
-    @stage = new c.Stage(@element)
+  @property "paused"
+    get: -> c.Ticker.getPaused()
+    set: (bool) -> c.Ticker.setPaused(bool)
 
-    parent = @element.parentNode
-    parent.insertAfter(@element, Serenade.render("console", this))
-    parent.insertAfter(@element, Serenade.render("info", this))
+  constructor: (container) ->
+    @view = Serenade.render("game", this, this)
 
-    c.Ticker.setFPS(30)
+    @stage = new c.Stage($("canvas", @view))
+    @world = new Container()
+    @ships = new Container()
+    @stage.addChild(@world.container, @ships.container)
+
+    ship = new Ship()
+    @ships.push(ship)
+
+    c.Ticker.setFPS(60)
     c.Ticker.addListener(this)
 
-    @debug("Stage loaded!")
+    container.appendChild(@view)
 
   debug: (message, type = "debug") ->
     @messages.unshift(DebugMessage.create(message, type))
 
-  tick: (delta, paused)->
+  tick: (delta, paused) ->
     @fps = c.Ticker.getMeasuredFPS()
+    @redraw()
+
+  redraw: ->
+    @stage.update()

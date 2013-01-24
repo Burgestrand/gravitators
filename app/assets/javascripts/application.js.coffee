@@ -14,12 +14,10 @@
 #= require easeljs
 #= require ./utils
 #= require ./monkey_patches
+#= require_directory ./helpers
 #= require_directory ./models
 #= require_directory ./views
 #= require_directory ./game
 #= require_self
 
 @c = createjs
-
-at document, "DOMContentLoaded", =>
-  @game = new Game($("#stage"))
