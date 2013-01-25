@@ -20,5 +20,3 @@
 #= require_directory ./views
 #= require_directory ./game
 #= require_self
-
-@c = createjs

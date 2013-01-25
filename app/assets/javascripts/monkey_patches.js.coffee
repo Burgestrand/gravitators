@@ -1,3 +1,9 @@
+cConstructor = c.Container
+c.Container = ->
+  container = new cConstructor()
+  container.addChild(arguments...)
+  container
+
 Object.values = (object) ->
   object[key] for key in Object.keys(object)
 

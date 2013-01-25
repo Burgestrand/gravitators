@@ -24,7 +24,7 @@ class @Game extends Serenade.Model
     @stage = new c.Stage($("canvas", @view))
     @world = new Container()
     @ships = new Container()
-    @stage.addChild(@world.container, @ships.container)
+    @stage.addChild(@world.shape, @ships.shape)
 
     ship = new Ship(24, 30, "#cc0000")
     ship.position = 200

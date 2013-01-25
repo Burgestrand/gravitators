@@ -6,11 +6,14 @@ class @Container extends Serenade.Model
     get: -> @children.map((c) -> c.shape)
 
   constructor: ->
-    super
-    @container = new c.Container()
+    @shape = new c.Container()
     @shapes_property.bind =>
-      @container.removeAllChildren()
-      @container.addChild(@shapes...)
+      @shape.removeAllChildren()
+      @shape.addChild(@shapes...)
+    @children.update(arguments)
 
   push: ->
     @children.push(arguments...)
+
+  delete: ->
+    @children.delete(arguments...)
