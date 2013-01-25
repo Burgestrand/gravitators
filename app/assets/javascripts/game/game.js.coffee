@@ -26,11 +26,8 @@ class @Game extends Serenade.Model
     @ships = new Container()
     @stage.addChild(@world.container, @ships.container)
 
-    ship = new Ship(24, 30, "#ccff00")
-    window.player2 = new Player(ship, accelerate: "up", left: "left", right: "right", shoot: "x")
-    @join(player2)
-
     ship = new Ship(24, 30, "#cc0000")
+    ship.position = 200
     window.player1 = new Player(ship, accelerate: "W", left: "A", right: "D", shoot: "space")
     @join(player1)
 

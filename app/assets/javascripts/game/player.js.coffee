@@ -1,5 +1,4 @@
 class @Player extends Serenade.Model
-  @property "speed", value: 4
   @property "controls", value: {}
 
   @property "ship"
@@ -10,11 +9,9 @@ class @Player extends Serenade.Model
       @_ship = ship
       @shape?.onTick = => @tick(arguments...)
 
-  @delegate "shape", "position", "x", "y", "rotation", to: "ship"
+  @delegate "shape", "weapon", "position", "rotation", "speed", to: "ship"
 
   constructor: (@ship, @controls) ->
-    @position = { x: 200, y: 200 }
-
     key Object.values(@controls).join(","), "playing", (event) ->
       event.preventDefault()
 
