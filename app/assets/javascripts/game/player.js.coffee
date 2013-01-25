@@ -22,5 +22,4 @@ class @Player extends Serenade.Model
     @move(@speed * timeElapsed) if key.isPressed(@controls.accelerate)
 
   move: (length) ->
-    vector = Point.vector(length, @rotation)
-    @position = @position.add(vector)
+    @ship.move(length)

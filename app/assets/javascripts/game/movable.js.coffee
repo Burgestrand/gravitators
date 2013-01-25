@@ -10,3 +10,8 @@ class @Movable extends Serenade.Model
       { @x, @y } = Point.read(point)
 
   @property "speed", value: 4
+
+  move: (length) ->
+    vector = Point.vector(length, @rotation)
+    @position = @position.add(vector)
+
