@@ -3,6 +3,15 @@ class @Ship extends Serenade.Model
   @property "width"
   @property "height"
 
+  @property "position"
+    dependsOn: [ "x", "y" ]
+    get: ->
+      new Point(@x, @y)
+    set: (point) ->
+      { @x, @y } = point
+
+  @delegate "x", "y", "rotation", to: "shape"
+
   constructor: (@width, @height, color) ->
     @shape = new c.Shape()
     @shape.regX = @height / 2

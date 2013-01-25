@@ -2,24 +2,15 @@ class @Player extends Serenade.Model
   @property "speed", value: 4
   @property "controls", value: {}
 
-  @property "position"
-    get: ->
-      new Point(@x, @y)
-    set: (point) ->
-      { @x, @y } = point
-
   @property "ship"
     get: ->
       @_ship
-    set: (value) ->
-      position = @position  # save previous position
-      @shape?.onTick = null # clear previous handler
-      @_ship = value
-      @position = position
+    set: (ship) ->
+      ship.position = @position if @position
+      @_ship = ship
       @shape?.onTick = => @tick(arguments...)
 
-  @delegate "shape", to: "ship"
-  @delegate "x", "y", "rotation", to: "shape"
+  @delegate "shape", "position", "x", "y", "rotation", to: "ship"
 
   constructor: (@ship, @controls) ->
     @position = { x: 200, y: 200 }
