@@ -1,15 +1,29 @@
 class @Point extends Serenade.Model
   @property "x", "y"
 
+  @read: (x, y) ->
+    if x.x? and x.y?
+      new this(x.x, x.y)
+    else if x? and y?
+      new this(x, y)
+    else if x?
+      new this(x, x)
+    else
+      throw new Error("Must supply either point, x and y, or x!")
+
+  @vector: (length, direction) ->
+    d = Math.deg2rad(direction)
+    l = length
+    new this(Math.cos(d) * l, Math.sin(d) * l)
+
   constructor: (@x, @y) ->
 
-class @Vector extends Serenade.Model
-  @property "length", value: 0
-  @property "direction", value: 0
-  @property "point"
-    dependsOn: ["length", "direction"]
-    get: ->
-      d = Math.deg2rad(@direction)
-      new Point(Math.cos(d) * @length, Math.sin(d) * @length)
+  add: ->
+    p = Point.read(arguments...)
+    new @constructor(@x + p.x, @y + p.y)
 
-  constructor: (@length, @direction) ->
+  toJSON: ->
+    { @x, @y }
+
+  toString: ->
+    "(#{@x},#{@y})"
