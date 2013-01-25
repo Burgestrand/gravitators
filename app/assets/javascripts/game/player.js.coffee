@@ -6,8 +6,9 @@ class @Player extends Serenade.Model
       @_ship
     set: (ship) ->
       ship.position = @position if @position
+      ship.rotation = @rotation if @rotation
+      ship.shape.onTick = => @tick(arguments...)
       @_ship = ship
-      @shape?.onTick = => @tick(arguments...)
 
   @delegate "shape", "weapon", "position", "rotation", "speed", to: "ship"
 

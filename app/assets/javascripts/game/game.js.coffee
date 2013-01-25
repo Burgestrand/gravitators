@@ -29,16 +29,13 @@ class @Game extends Serenade.Model
     ship = new Ship(24, 30, "#cc0000")
     ship.position = 200
     window.player1 = new Player(ship, accelerate: "W", left: "A", right: "D", shoot: "space")
-    @join(player1)
+    @ships.push(player1)
 
     c.Ticker.setFPS(60)
     c.Ticker.addListener(this)
     @paused = false
 
     container.appendChild(@view)
-
-  join: (player) ->
-    @ships.push(player)
 
   debug: (message, type = "debug") ->
     @messages.unshift(DebugMessage.create(message, type))

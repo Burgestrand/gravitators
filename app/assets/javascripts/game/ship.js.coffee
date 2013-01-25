@@ -8,7 +8,7 @@ class @Ship extends Movable
     @shape.regX = @height / 2
     @shape.regY = @width / 2
     @shape.graphics
-      .setStrokeStyle(2, "round", "miter", 1)
+      .setStrokeStyle(2, "round")
       .beginStroke("#000000")
       .beginFill(color)
       .moveTo(0, 0)
