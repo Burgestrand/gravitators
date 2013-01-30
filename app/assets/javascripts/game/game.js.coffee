@@ -28,10 +28,11 @@ class @Game extends Serenade.Model
 
     ship = new Ship(24, 30, "#cc0000")
     ship.position = 200
+    ship.weapon = new Weapon()
     window.player1 = new Player(ship, accelerate: "W", left: "A", right: "D", shoot: "space")
     @ships.push(player1)
 
-    c.Ticker.setFPS(60)
+    c.Ticker.setFPS(48)
     c.Ticker.addListener(this)
     @paused = false
 

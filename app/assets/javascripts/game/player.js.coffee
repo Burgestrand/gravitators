@@ -26,7 +26,10 @@ class @Player extends Serenade.Model
     @rotation -= 5 * timeElapsed if key.isPressed(@controls.left)
     @rotation += 5 * timeElapsed if key.isPressed(@controls.right)
     @move(@speed * timeElapsed) if key.isPressed(@controls.accelerate)
-    @weapon?.shoot(timeElapsed) if key.isPressed(@controls.shoot)
+    @shoot(timeElapsed) if key.isPressed(@controls.shoot)
 
   move: (length) ->
     @ship.move(length)
+
+  shoot: (times) ->
+    @ship.shoot(times)

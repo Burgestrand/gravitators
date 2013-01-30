@@ -12,8 +12,6 @@ class @Container extends Serenade.Model
       @shape.addChild(@shapes...)
     @children.update(arguments)
 
-  push: ->
-    @children.push(arguments...)
-
-  delete: ->
-    @children.delete(arguments...)
+  [ "push", "update", "forEach", "filter" ].forEach (fn) =>
+    @::[fn] = ->
+      @children[fn](arguments...)

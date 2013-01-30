@@ -18,3 +18,6 @@ class @Ship extends Movable
       .closePath()
       .endFill()
       .endStroke()
+
+  shoot: (timeElapsed) ->
+    @weapon?.shoot(@position, timeElapsed)
