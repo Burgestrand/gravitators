@@ -2,6 +2,10 @@ class @Ship extends Movable
   @property "width"
   @property "height"
   @property "weapon"
+  @property "tip"
+    get: ->
+      vector = Point.vector(@height, @rotation)
+      @position.add(vector)
 
   constructor: (@width, @height, color) ->
     @shape = new c.Shape()
@@ -20,4 +24,4 @@ class @Ship extends Movable
       .endStroke()
 
   shoot: (timeElapsed) ->
-    @weapon?.shoot(@position, timeElapsed)
+    @weapon?.shoot(@tip, @rotation)
