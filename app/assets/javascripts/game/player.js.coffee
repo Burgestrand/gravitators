@@ -10,12 +10,11 @@ class @Player extends Serenade.Model
       ship.shape.onTick = => @tick(arguments...)
       @_ship = ship
 
-  @delegate "weapon", "position", "rotation", "speed", to: "ship"
+  @forward "weapon", "rotation", "speed", to: "ship"
 
   @property "shape"
-    dependsOn: [ "ship.shape", "ship.weapon" ]
     get: ->
-      new c.Container(@ship.shape, @ship.weapon?.shape)
+      new c.Container(@ship.shape, @weapon?.shape)
 
   constructor: (@ship, @controls) ->
     key Object.values(@controls).join(","), "playing", (event) ->

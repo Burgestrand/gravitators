@@ -25,3 +25,10 @@ Node::insertAfter = (node, newNode) ->
   if node.parentNode isnt this
     throw new Error("node’s parent is not myself!")
   @insertBefore(newNode, node.nextSibling)
+
+Serenade.Model.forward = (names..., options) ->
+  to = options.to
+  names.forEach (name) =>
+    @property name,
+      get: -> @[to]?[name]
+      set: (value) -> @[to]?[name] = value
