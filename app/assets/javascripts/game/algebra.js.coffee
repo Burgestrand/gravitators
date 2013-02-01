@@ -1,4 +1,4 @@
-class @Point extends Serenade.Model
+class @Point extends Model
   @property "x", "y"
 
   @read: (x, y) ->

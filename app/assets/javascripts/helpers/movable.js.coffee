@@ -1,4 +1,4 @@
-class @Movable extends Serenade.Model
+class @Movable extends Model
   @property "shape"
   @forward "x", "y", "rotation", to: "shape"
 

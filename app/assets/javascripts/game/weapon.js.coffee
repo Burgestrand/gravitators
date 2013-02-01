@@ -1,4 +1,4 @@
-class @Weapon extends Serenade.Model
+class @Weapon extends Model
   @property "shape"
 
   constructor: ->

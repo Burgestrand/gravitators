@@ -1,4 +1,4 @@
-class @Player extends Serenade.Model
+class @Player extends Model
   @property "controls", value: {}
 
   @property "ship"
