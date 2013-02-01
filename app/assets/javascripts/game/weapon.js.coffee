@@ -7,9 +7,15 @@ class @Weapon extends Serenade.Model
     @bullets = []
 
   tick: (timeElapsed) ->
-    @bullets = @bullets.filter((bullet) -> bullet.tick(timeElapsed) > 0)
-    @shape.removeAllChildren()
-    @shape.addChild(@bullets.map((o) -> o.shape)...)
+    removed = for bullet, index in @bullets
+      if bullet.tick(timeElapsed) <= 0
+        index
+      else
+        continue
+
+    if removed.length > 0
+      @bullets.splice(0, removed.length)
+      @shape.removeChildAt(removed...)
 
   shoot: (origin, rotation) ->
     bullet = new Bullet(origin, rotation)
