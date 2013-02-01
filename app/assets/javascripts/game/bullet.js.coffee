@@ -1,7 +1,7 @@
 class @Bullet extends Movable
   @Lifetime = 2000
 
-  constructor: (origin, rotation) ->
+  constructor: ->
     radius = 2
     @shape = new c.Shape()
     @shape.graphics
@@ -11,12 +11,11 @@ class @Bullet extends Movable
     @shape.cache(0, 0, radius * 2, radius * 2)
     @shape.regX = radius
     @shape.regY = radius
-    @position = origin
-    @rotation = rotation
+    super
     @expiration = Bullet.Lifetime
 
   tick: (timeElapsed) ->
     @expiration -= timeElapsed
     @shape?.alpha = @expiration / Bullet.Lifetime
-    @move(timeElapsed * 0.6)
+    @move(timeElapsed)
     @expiration

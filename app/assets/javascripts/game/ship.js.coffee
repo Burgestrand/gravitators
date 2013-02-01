@@ -4,7 +4,7 @@ class @Ship extends Movable
   @property "weapon"
   @property "tip"
     get: ->
-      vector = Point.vector(@height, @rotation)
+      vector = Point.vector(@height / 2, @rotation)
       @position.add(vector)
 
   constructor: (@width, @height, color) ->
@@ -24,4 +24,4 @@ class @Ship extends Movable
       .endStroke()
 
   shoot: (timeElapsed) ->
-    @weapon?.shoot(@tip, @rotation)
+    @weapon?.shoot(@tip, @speed, @rotation)

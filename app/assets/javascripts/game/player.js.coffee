@@ -5,8 +5,9 @@ class @Player extends Model
     get: ->
       @_ship
     set: (ship) ->
-      ship.position = @position if @position
-      ship.rotation = @rotation if @rotation
+      if @ship
+        ship.position = @position
+        ship.rotation = @rotation
       ship.shape.onTick = => @tick(arguments...)
       @_ship = ship
 
@@ -22,13 +23,7 @@ class @Player extends Model
 
   tick: (timeElapsed) ->
     timeElapsed *= 0.1
-    @rotation -= 5 * timeElapsed if key.isPressed(@controls.left)
-    @rotation += 5 * timeElapsed if key.isPressed(@controls.right)
-    @move(@speed * timeElapsed) if key.isPressed(@controls.accelerate)
-    @shoot(timeElapsed) if key.isPressed(@controls.shoot)
-
-  move: (length) ->
-    @ship.move(length)
-
-  shoot: (times) ->
-    @ship.shoot(times)
+    @ship.rotate(-1 * timeElapsed) if key.isPressed(@controls.left)
+    @ship.rotate(+1 * timeElapsed) if key.isPressed(@controls.right)
+    @ship.move(timeElapsed) if key.isPressed(@controls.accelerate)
+    @ship.shoot(timeElapsed) if key.isPressed(@controls.shoot)

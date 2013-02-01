@@ -9,8 +9,11 @@ class @Movable extends Model
       { @x, @y } = Point.read(point)
 
   @property "speed", value: 4
+  @property "revolution", value: 4
 
   move: (length) ->
-    vector = Point.vector(length, @rotation)
+    vector = Point.vector(@speed * length, @rotation)
     @position = @position.add(vector)
 
+  rotate: (length) ->
+    @rotation += @revolution * length

@@ -20,3 +20,7 @@ class @Model
       @property name,
         get: -> @[to]?[name]
         set: (value) -> @[to]?[name] = value
+
+  constructor: (attributes) ->
+    for own key, value of attributes
+      @[key] = value
