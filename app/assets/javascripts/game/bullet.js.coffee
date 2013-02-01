@@ -1,5 +1,5 @@
 class @Bullet extends Movable
-  @Lifetime = 2000
+  @Lifetime = 10000
 
   constructor: ->
     radius = 2
@@ -15,7 +15,7 @@ class @Bullet extends Movable
     @expiration = Bullet.Lifetime
 
   tick: (timeElapsed) ->
+    super
     @expiration -= timeElapsed
     @shape?.alpha = @expiration / Bullet.Lifetime
-    @move(timeElapsed)
     @expiration

@@ -1,11 +1,15 @@
 class @Ship extends Movable
   @property "width"
   @property "height"
-  @property "weapon"
   @property "tip"
     get: ->
       vector = Point.vector(@height / 2, @rotation)
       @position.add(vector)
+
+  @property "weapon"
+
+  @property "acceleration", value: 200
+  @property "retardation", value: 300
 
   constructor: (@width, @height, color) ->
     @shape = new c.Shape()
@@ -23,5 +27,11 @@ class @Ship extends Movable
       .endFill()
       .endStroke()
 
+  accelerate: (timeElapsed) ->
+    @velocity += timeElapsed * (@acceleration / 1000)
+
+  retardate: (timeElapsed) ->
+    @velocity -= timeElapsed * (@retardation / 1000)
+
   shoot: (timeElapsed) ->
-    @weapon?.shoot(@tip, @speed, @rotation)
+    @weapon?.shoot(@)

@@ -8,22 +8,27 @@ class @Player extends Model
       if @ship
         ship.position = @position
         ship.rotation = @rotation
-      ship.shape.onTick = => @tick(arguments...)
       @_ship = ship
 
-  @forward "position", "weapon", "rotation", "speed", to: "ship"
+  @forward "position", "weapon", "rotation", "velocity", to: "ship"
 
   @property "shape"
     get: ->
-      new c.Container(@ship.shape, @weapon?.shape)
+      container = new c.Container(@ship.shape, @weapon?.shape)
+      container.onTick = => @tick(arguments...)
+      container
 
   constructor: (@ship, @controls) ->
     key Object.values(@controls).join(","), "playing", (event) ->
       event.preventDefault()
 
   tick: (timeElapsed) ->
-    timeElapsed *= 0.1
-    @ship.rotate(-1 * timeElapsed) if key.isPressed(@controls.left)
-    @ship.rotate(+1 * timeElapsed) if key.isPressed(@controls.right)
-    @ship.move(timeElapsed) if key.isPressed(@controls.accelerate)
+    @ship.rotate(-.1 * timeElapsed) if key.isPressed(@controls.left)
+    @ship.rotate(+.1 * timeElapsed) if key.isPressed(@controls.right)
+
+    if key.isPressed(@controls.accelerate)
+      @ship.accelerate(timeElapsed)
+    else if key.isPressed(@controls.retardate)
+      @ship.retardate(timeElapsed)
+
     @ship.shoot(timeElapsed) if key.isPressed(@controls.shoot)

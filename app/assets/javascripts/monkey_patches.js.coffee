@@ -25,3 +25,6 @@ Node::insertAfter = (node, newNode) ->
   if node.parentNode isnt this
     throw new Error("node’s parent is not myself!")
   @insertBefore(newNode, node.nextSibling)
+
+Math.constrain = (value, minimum, maximum) ->
+  Math.min(Math.max(value, minimum), maximum)

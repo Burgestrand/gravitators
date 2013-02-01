@@ -17,7 +17,8 @@ class @Weapon extends Model
       @bullets.splice(0, removed.length)
       @shape.removeChildAt(removed...)
 
-  shoot: (position, speed, rotation) ->
-    bullet = new Bullet({ position, speed, rotation })
+  shoot: (ship) ->
+    bullet = new Bullet(position: ship.tip, rotation: ship.rotation)
+    bullet.velocity = 200 + Math.constrain(ship.velocity, -160, 160)
     @shape.addChild(bullet.shape)
     @bullets.push(bullet)
