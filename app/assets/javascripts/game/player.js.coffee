@@ -10,7 +10,7 @@ class @Player extends Serenade.Model
       ship.shape.onTick = => @tick(arguments...)
       @_ship = ship
 
-  @forward "weapon", "rotation", "speed", to: "ship"
+  @forward "position", "weapon", "rotation", "speed", to: "ship"
 
   @property "shape"
     get: ->
