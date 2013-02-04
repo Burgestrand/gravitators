@@ -50,6 +50,10 @@ class @Point extends Model
     p = Point.read(arguments...)
     new @constructor(@x + p.x, @y + p.y)
 
+  dotproduct: (vector) ->
+    angle = vector.angle - @angle
+    Math.cos(angle) * vector.length
+
   clone: ->
     new Point(@x, @y)
 

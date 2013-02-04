@@ -25,14 +25,8 @@ class @Weapon extends Model
 
   shoot: (ship) ->
     if @gametime > @lastShot + @cooldown
-      sv = ship.velocity
-      trajectory = Point.vector(ship.maxVelocity * 1.2, ship.rotation)
-
-      da = sv.angle - trajectory.angle
-      scalar = Math.cos(da) * sv.length
-
-      trajectory.length += scalar
-
-      bullet = new Bullet(position: ship.tip, velocity: trajectory)
+      velocity = Point.vector(ship.maxVelocity * 1.2, ship.rotation)
+      velocity.length += velocity.dotproduct(ship.velocity)
+      bullet = new Bullet(position: ship.tip, velocity: velocity)
       @bullets.push(bullet)
       @lastShot = @gametime
