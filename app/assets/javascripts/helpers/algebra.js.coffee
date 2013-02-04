@@ -28,6 +28,22 @@ class @Point extends Model
     set: (y) ->
       @_y = Math.round(y, 2)
 
+  @property "length"
+    get: ->
+      Math.sqrt(@x * @x + @y * @y)
+    set: (length) ->
+      angle = @angle
+      @x = Math.cos(angle) * length
+      @y = Math.sin(angle) * length
+
+  @property "angle"
+    get: ->
+      Math.atan2(@y, @x)
+    set: (angle) ->
+      length = @length
+      @x = Math.cos(angle) * length
+      @y = Math.sin(angle) * length
+
   constructor: (@x, @y) ->
 
   add: ->
