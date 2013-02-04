@@ -8,10 +8,10 @@ class @Weapon extends Model
       c.Ticker.getTime(true)
 
   constructor: ->
-    @shape = new c.Container()
+    @bullets = new Container()
+    @shape = @bullets.shape
     @shape.onTick = => @tick(arguments...)
     @lastShot = -Infinity
-    @bullets = []
 
   tick: (timeElapsed) ->
     removed = for bullet, index in @bullets
@@ -22,14 +22,17 @@ class @Weapon extends Model
 
     if removed.length > 0
       @bullets.splice(0, removed.length)
-      @shape.removeChildAt(removed...)
 
   shoot: (ship) ->
     if @gametime > @lastShot + @cooldown
-      velocity = ship.velocity
-      velocity.angle = ship.rotation
-      velocity.length = Math.max(200, ship.velocity.length * 1.1)
-      bullet = new Bullet(position: ship.tip, velocity: velocity)
-      @shape.addChild(bullet.shape)
+      sv = ship.velocity
+      trajectory = Point.vector(ship.maxVelocity * 1.2, ship.rotation)
+
+      da = sv.angle - trajectory.angle
+      scalar = Math.cos(da) * sv.length
+
+      trajectory.length += scalar
+
+      bullet = new Bullet(position: ship.tip, velocity: trajectory)
       @bullets.push(bullet)
       @lastShot = @gametime
