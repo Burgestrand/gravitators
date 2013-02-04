@@ -50,6 +50,9 @@ class @Point extends Model
     p = Point.read(arguments...)
     new @constructor(@x + p.x, @y + p.y)
 
+  clone: ->
+    new Point(@x, @y)
+
   toJSON: ->
     { @x, @y }
 
