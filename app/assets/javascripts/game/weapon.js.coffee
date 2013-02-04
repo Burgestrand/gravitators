@@ -1,9 +1,12 @@
 class @Weapon extends Model
   @property "shape"
 
+  @property "cooldown", value: 250
+
   constructor: ->
     @shape = new c.Container()
     @shape.onTick = => @tick(arguments...)
+    @lastShot = -Infinity
     @bullets = []
 
   tick: (timeElapsed) ->
@@ -18,7 +21,9 @@ class @Weapon extends Model
       @shape.removeChildAt(removed...)
 
   shoot: (ship) ->
-    bullet = new Bullet(position: ship.tip, rotation: ship.rotation)
-    bullet.velocity = 200 + Math.constrain(ship.velocity, -160, 160)
-    @shape.addChild(bullet.shape)
-    @bullets.push(bullet)
+    if @gametime > @lastShot + @cooldown
+      bullet = new Bullet(position: ship.tip, rotation: ship.rotation)
+      bullet.velocity = 200 + Math.constrain(ship.velocity, -160, 160)
+      @shape.addChild(bullet.shape)
+      @bullets.push(bullet)
+      @lastShot = @gametime
