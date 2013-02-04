@@ -1,3 +1,5 @@
+#= require ./model
+
 class @Point extends Model
   @property "x", "y"
 

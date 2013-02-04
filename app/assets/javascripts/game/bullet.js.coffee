@@ -1,5 +1,5 @@
 class @Bullet extends Movable
-  @Lifetime = 10000
+  @Lifetime = 2000
 
   constructor: ->
     radius = 2
