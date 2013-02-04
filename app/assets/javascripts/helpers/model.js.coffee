@@ -24,3 +24,7 @@ class @Model
   constructor: (attributes) ->
     for own key, value of attributes
       @[key] = value
+
+  @property "gametime"
+    get: ->
+      c.Ticker.getTime(true)
