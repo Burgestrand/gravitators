@@ -23,6 +23,7 @@ class @Ship extends Movable
       .closePath()
       .endFill()
       .endStroke()
+    @maxVelocity = 300
 
   shoot: (timeElapsed) ->
     @weapon?.shoot(@)
