@@ -23,8 +23,8 @@ class @Player extends Model
       event.preventDefault()
 
   tick: (timeElapsed) ->
-    @ship.rotate(-.1 * timeElapsed) if key.isPressed(@controls.left)
-    @ship.rotate(+.1 * timeElapsed) if key.isPressed(@controls.right)
+    @ship.rotate(timeElapsed, false) if key.isPressed(@controls.left)
+    @ship.rotate(timeElapsed, true) if key.isPressed(@controls.right)
 
     if key.isPressed(@controls.accelerate)
       @ship.accelerate(timeElapsed)

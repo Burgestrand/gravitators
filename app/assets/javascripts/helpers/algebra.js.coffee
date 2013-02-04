@@ -1,8 +1,6 @@
 #= require ./model
 
 class @Point extends Model
-  @property "x", "y"
-
   @read: (x, y) ->
     if x.x? and x.y?
       new this(x.x, x.y)
@@ -13,11 +11,12 @@ class @Point extends Model
     else
       throw new Error("Must supply either point, x and y, or x!")
 
-  @vector: (length, direction) ->
-    d = Math.deg2rad(direction)
+  @vector: (length, angle) ->
+    a = angle
     l = length
-    new this(Math.cos(d) * l, Math.sin(d) * l)
+    new this(Math.cos(a) * l, Math.sin(a) * l)
 
+  @property "x", "y"
   constructor: (@x, @y) ->
 
   add: ->

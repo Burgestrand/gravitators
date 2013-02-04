@@ -6,7 +6,13 @@ class @Movable extends Model
       @_shape = shape
       @_shape.onTick = => @tick(arguments...)
 
-  @forward "x", "y", "rotation", to: "shape"
+  @forward "x", "y", to: "shape"
+
+  @property "rotation"
+    get: ->
+      Math.deg2rad(@shape.rotation)
+    set: (angle) ->
+      @shape.rotation = Math.rad2deg(angle)
 
   @property "position"
     get: ->
@@ -20,7 +26,7 @@ class @Movable extends Model
     set: (velocity) ->
       @_velocity = Math.constrain(velocity, -@maxVelocity, @maxVelocity)
 
-  @property "revolution", value: 4
+  @property "revolution", value: Math.deg2rad(360)
   @property "maxVelocity", value: 600
 
   tick: (timeElapsed) ->
@@ -32,5 +38,7 @@ class @Movable extends Model
       vector = Point.vector(length, @rotation)
       @position = @position.add(vector)
 
-  rotate: (degrees) ->
-    @rotation += @revolution * degrees
+  rotate: (duration, positive) ->
+    angle = @revolution * (duration / 1000)
+    angle *= -1 if not positive
+    @rotation += angle
