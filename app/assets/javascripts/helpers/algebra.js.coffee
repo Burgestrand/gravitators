@@ -16,7 +16,18 @@ class @Point extends Model
     l = length
     new this(Math.cos(a) * l, Math.sin(a) * l)
 
-  @property "x", "y"
+  @property "x"
+    get: ->
+      @_x
+    set: (x) ->
+      @_x = Math.round(x, 2)
+
+  @property "y"
+    get: ->
+      @_y
+    set: (y) ->
+      @_y = Math.round(y, 2)
+
   constructor: (@x, @y) ->
 
   add: ->
