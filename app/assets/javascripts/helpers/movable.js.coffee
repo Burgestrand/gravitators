@@ -22,9 +22,9 @@ class @Movable extends Model
 
   @property "velocity"
     get: ->
-      @_velocity or 0
+      @_velocity?.clone() or new Point(0, 0)
     set: (velocity) ->
-      @_velocity = Math.constrain(velocity, -@maxVelocity, @maxVelocity)
+      @_velocity = Point.read(velocity)
 
   @property "acceleration", value: 200
   @property "maxVelocity", value: 600
@@ -35,15 +35,19 @@ class @Movable extends Model
     @move(timeElapsed)
 
   move: (duration) ->
-    length = @velocity * (duration / 1000)
-    vector = Point.vector(length, @rotation)
+    vector = @velocity
+    vector.length *= (duration / 1000)
     @position = @position.add(vector)
 
   accelerate: (duration) ->
-    @velocity += duration * (@acceleration / 1000)
+    length   = duration * (@acceleration / 1000)
+    movement = Point.vector(length, @rotation)
+    velocity = @velocity.add(movement)
+    velocity.length = Math.min(velocity.length, @maxVelocity)
+    @velocity = velocity
 
   retardate: (duration) ->
-    @velocity -= duration * (@acceleration / 1000)
+    @accelerate(-1 * duration)
 
   rotate: (duration, positive) ->
     angle = @revolution * (duration / 1000)

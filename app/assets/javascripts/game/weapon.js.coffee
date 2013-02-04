@@ -26,8 +26,10 @@ class @Weapon extends Model
 
   shoot: (ship) ->
     if @gametime > @lastShot + @cooldown
-      bullet = new Bullet(position: ship.tip, rotation: ship.rotation)
-      bullet.velocity = 200 + Math.constrain(ship.velocity, -160, 160)
+      velocity = ship.velocity
+      velocity.angle = ship.rotation
+      velocity.length = Math.max(200, ship.velocity.length * 1.1)
+      bullet = new Bullet(position: ship.tip, velocity: velocity)
       @shape.addChild(bullet.shape)
       @bullets.push(bullet)
       @lastShot = @gametime
