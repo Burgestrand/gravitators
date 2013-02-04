@@ -8,9 +8,6 @@ class @Ship extends Movable
 
   @property "weapon"
 
-  @property "acceleration", value: 200
-  @property "retardation", value: 300
-
   constructor: (@width, @height, color) ->
     @shape = new c.Shape()
     @shape.regX = @height / 2
@@ -26,12 +23,6 @@ class @Ship extends Movable
       .closePath()
       .endFill()
       .endStroke()
-
-  accelerate: (timeElapsed) ->
-    @velocity += timeElapsed * (@acceleration / 1000)
-
-  retardate: (timeElapsed) ->
-    @velocity -= timeElapsed * (@retardation / 1000)
 
   shoot: (timeElapsed) ->
     @weapon?.shoot(@)

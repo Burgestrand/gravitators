@@ -26,8 +26,10 @@ class @Movable extends Model
     set: (velocity) ->
       @_velocity = Math.constrain(velocity, -@maxVelocity, @maxVelocity)
 
-  @property "revolution", value: Math.deg2rad(360)
+  @property "acceleration", value: 200
   @property "maxVelocity", value: 600
+
+  @property "revolution", value: Math.deg2rad(360)
 
   tick: (timeElapsed) ->
     @move(timeElapsed)
@@ -36,6 +38,12 @@ class @Movable extends Model
     length = @velocity * (duration / 1000)
     vector = Point.vector(length, @rotation)
     @position = @position.add(vector)
+
+  accelerate: (duration) ->
+    @velocity += duration * (@acceleration / 1000)
+
+  retardate: (duration) ->
+    @velocity -= duration * (@acceleration / 1000)
 
   rotate: (duration, positive) ->
     angle = @revolution * (duration / 1000)
