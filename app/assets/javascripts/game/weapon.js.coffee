@@ -3,6 +3,10 @@ class @Weapon extends Model
 
   @property "cooldown", value: 250
 
+  @property "gametime"
+    get: ->
+      c.Ticker.getTime(true)
+
   constructor: ->
     @shape = new c.Container()
     @shape.onTick = => @tick(arguments...)
