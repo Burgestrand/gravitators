@@ -33,10 +33,9 @@ class @Movable extends Model
     @move(timeElapsed)
 
   move: (duration) ->
-    if @velocity
-      length = duration * (@velocity / 1000)
-      vector = Point.vector(length, @rotation)
-      @position = @position.add(vector)
+    length = duration * (@velocity / 1000)
+    vector = Point.vector(length, @rotation)
+    @position = @position.add(vector)
 
   rotate: (duration, positive) ->
     angle = @revolution * (duration / 1000)
