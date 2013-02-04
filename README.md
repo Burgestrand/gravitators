@@ -4,7 +4,7 @@ When I was a kid, I had a game. In this game, you would pilot a tiny little spac
 
 You would initially drive straight into walls, crashland into the ground, or even collide head-on with your rival.
 
-After some time you learn to navigate your vessel. You shoot at each other, pick up items to improve your weapon, accidentally kill yourself with your own bullets, and sometimes you would score a clean bullseye on your rival.
+After some time you learn to navigate your vessel. You shoot at each other, pick up items to improve your weapons, accidentally kill yourself with your own bullets, and sometimes you would score a clean bullseye on your rival.
 
 It was Gravitation: <http://www.youtube.com/watch?v=KX3NlMgAEcQ>. [Gravitators](http://gravitators.herokuapp.com/) is my remake.
 
