@@ -8,6 +8,7 @@ class @Player extends Model
       if @ship
         ship.position = @position
         ship.rotation = @rotation
+        ship.velocity = @velocity
       @_ship = ship
 
   @forward "position", "weapon", "rotation", "velocity", to: "ship"
