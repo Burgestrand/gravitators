@@ -53,3 +53,7 @@ class @Movable extends Model
     angle = @revolution * (duration / 1000)
     angle *= -1 if not positive
     @rotation += angle
+
+  collidesWith: (point) ->
+    point = @shape.globalToLocal(point.x, point.y)
+    @shape.hitTest(point.x, point.y)
