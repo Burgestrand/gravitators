@@ -23,6 +23,7 @@ class @Ship extends Movable
       .closePath()
       .endFill()
       .endStroke()
+    @gravity = new Point(0, 100)
     @maxVelocity = 300
 
   shoot: (timeElapsed) ->

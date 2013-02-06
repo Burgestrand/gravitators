@@ -46,6 +46,11 @@ class @Point extends Model
 
   constructor: (@x, @y) ->
 
+  multiply: (scalar) ->
+    clone = @clone()
+    clone.length *= scalar
+    clone
+
   add: ->
     p = Point.read(arguments...)
     new @constructor(@x + p.x, @y + p.y)

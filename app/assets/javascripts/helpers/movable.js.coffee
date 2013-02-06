@@ -1,4 +1,6 @@
 class @Movable extends Model
+  @gravity = new Point(0, 0)
+
   @property "shape"
     get: ->
       @_shape
@@ -26,18 +28,23 @@ class @Movable extends Model
     set: (velocity) ->
       @_velocity = Point.read(velocity)
 
-  @property "acceleration", value: 200
+  @property "gravity"
+    get: ->
+      @_gravity or @constructor.gravity
+    set: ->
+      @_gravity = Point.read(arguments...)
+
+  @property "acceleration", value: 600
   @property "maxVelocity", value: 600
 
   @property "revolution", value: Math.deg2rad(360)
 
   tick: (timeElapsed) ->
+    @velocity = @velocity.add(@gravity.multiply(timeElapsed / 1000))
     @move(timeElapsed)
 
   move: (duration) ->
-    vector = @velocity
-    vector.length *= (duration / 1000)
-    @position = @position.add(vector)
+    @position = @position.add(@velocity.multiply(duration / 1000))
 
   accelerate: (duration) ->
     length   = duration * (@acceleration / 1000)
