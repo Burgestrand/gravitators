@@ -1,3 +1,4 @@
+
 ###
 # Page options, layouts, aliases and proxies
 ###
@@ -22,10 +23,6 @@
 activate :livereload
 activate :autoprefixer
 activate :bourbon
-
-after_configuration do
-  # sprockets.append_path Serenade::ASSET_PATH
-end
 
 # Methods defined in the helpers block are available in templates
 # helpers do

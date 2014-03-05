@@ -1,4 +1,0 @@
-section#game
-  - view "canvas"
-  - view "info"
-  - view "console"
