@@ -1,5 +1,3 @@
-# This file is used by Rack-based servers to start the application.
+require "middleman/rack"
 
-require ::File.expand_path('../config/environment',  __FILE__)
-$stdout.sync = Rails.env.development?
-run Gravitators::Application
+run Middleman.server
