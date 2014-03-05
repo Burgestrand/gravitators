@@ -2,46 +2,24 @@
 
 * { @include box-sizing(border-box); }
 
-body {
-  color: #333;
-  font: 100.01%/1.25 "Helvetica Neue", "Helvetica", sans-serif;
-}
-
-.container {
-  @include box-sizing(content-box);
-  margin: 0 auto;
-  padding: 16px;
-  position: relative;
-  width: 1024px;
-}
-
-#stage {
-  box-shadow: rgba(0, 0, 0, 0.4) 0 1px 3px;
-  border: 1px solid #DDD;
-}
-
-.info {
-  color: #999;
-  list-style: none;
+html, body {
+  margin: 0;
   padding: 0;
-  position: absolute;
-  left: 16px + 16px;
-  top: 16px;
 }
 
-.console {
-  color: #666;
-  padding: 1em;
+body {
+  font: 100.01%/1.25 "Helvetica Neue", "Helvetica", sans-serif;
+  color: #333;
+}
+
+canvas {
+  border: 1px solid;
+  margin-top: 4em;
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   position: relative;
-
-  font: {
-    weight: bold;
-    family: monospace;
-  }
-
-  ol {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
+  height: 640px;
+  width: 640px;
 }
