@@ -1,4 +1,7 @@
 class @Vec2
+  @Origin = new Vec2(0, 0)
+  @Id = new Vec2(1, 1)
+
   constructor: (@x, @y) ->
 
   length: ->
