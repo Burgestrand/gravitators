@@ -2,6 +2,11 @@ class @Vec2
   @Origin = new Vec2(0, 0)
   @Id = new Vec2(1, 1)
 
+  @polar = (angle, length) ->
+    x = Math.cos(angle) * length
+    y = Math.sin(angle) * length
+    new @(x, y)
+
   constructor: (@x, @y) ->
 
   length: ->
