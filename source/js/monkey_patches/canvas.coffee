@@ -32,7 +32,7 @@ CanvasRenderingContext2D::vector = (v, o = new Vec2(0, 0), color = "red") ->
     @point(o, "black")
     @point(t, "white")
 
-CanvasRenderingContext2D::plane = (n, d, color = "#000000") ->
+CanvasRenderingContext2D::plane = ({ n, d }, color = "#000000") ->
   @path =>
     @strokeStyle = color
 

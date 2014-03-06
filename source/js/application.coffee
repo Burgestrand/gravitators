@@ -13,14 +13,21 @@ document.addEventListener "DOMContentLoaded", =>
   context = canvas.getContext("2d")
   context.font = "16px Helvetica Neue"
 
-  context.setTransform(1, 0, 0, 1, canvas.width / 2, canvas.height / 2)
+  translation = new Vec2(canvas.width / 2, canvas.height / 2)
+  context.setTransform(1, 0, 0, 1, translation.x, translation.y)
 
-  LARGE = 100000
-  planes = [[new Vec2(1, 0), 200], [new Vec2(0, -1), 200], [new Vec2(-1, 0), 200], [new Vec2(0, 1), 200]]
+  edges = [new Plane2(1, 0, 200), new Plane2(0, -1, 200), new Plane2(-1, 0, 200), new Plane2(0, 1, 200)]
   context.point({ x: 0, y: 0 }, "black")
   colors = ["red", "green", "blue", "orange"]
-  planes.forEach ([ n, d ], idx) ->
-    context.plane(n, d, colors[idx])
+  edges.forEach (e, idx) ->
+    context.plane(e, colors[idx])
+
+  canvas.addEventListener "click", (event) ->
+    clicked = new Vec2(event.offsetX, event.offsetY).sub(translation)
+    outside = edges.some (edge) ->
+      edge.distance(clicked) < 0
+    color = { true: "red", false: "blue" }
+    context.point(clicked, color[outside])
 
   @canvas = canvas
   @context = context
