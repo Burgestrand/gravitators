@@ -7,6 +7,13 @@ class @Vec2
   length: ->
     Math.sqrt @dot(this)
 
+  angle: ->
+    Math.atan2(@y, @x)
+
+  rad2deg = 180 / Math.PI
+  angled: ->
+    @angle() * rad2deg
+
   dot: ({ x, y }) ->
     @x * x + @y * y
 
