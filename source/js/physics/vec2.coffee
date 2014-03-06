@@ -27,3 +27,12 @@ class @Vec2
 
   sub: ({ x, y }) ->
     new Vec2(@x - x, @y - y)
+
+  mul: ({ x, y }) ->
+    new Vec2(@x * x, @y * y)
+
+  muls: (n) ->
+    @mul({ x: n, y: n })
+
+  toString: ->
+    "(#{@x},#{@y})"
