@@ -17,6 +17,11 @@ class @Vec2
   dot: ({ x, y }) ->
     @x * x + @y * y
 
+  rotate: (r) ->
+    x = @x * Math.cos(r) - @y * Math.sin(r)
+    y = @x * Math.sin(r) + @y * Math.cos(r)
+    new Vec2(x, y)
+
   add: ({ x, y }) ->
     new Vec2(@x + x, @y + y)
 
