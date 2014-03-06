@@ -24,10 +24,9 @@ document.addEventListener "DOMContentLoaded", =>
 
   canvas.addEventListener "click", (event) ->
     clicked = new Vec2(event.offsetX, event.offsetY).sub(translation)
-    outside = edges.some (edge) ->
+    edgeIndex = edges.findIndex (edge) ->
       edge.distance(clicked) < 0
-    color = { true: "red", false: "blue" }
-    context.point(clicked, color[outside])
+    context.point(clicked, colors[edgeIndex] ? "white")
 
   @canvas = canvas
   @context = context
