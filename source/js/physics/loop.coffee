@@ -9,7 +9,7 @@ class @Loop
     tick = =>
       now = performance.now()
       if now >= next
-        @update(now - prev)
+        @update.call(@update, now - prev)
         prev = now
         next = now + delta
       @running = requestAnimationFrame(tick)
