@@ -12,7 +12,7 @@ class @Loop
         @fps = ticks
         ticks = 0
       @_fpsCounter = setInterval(sampleFPS, 1000)
-    else
+    else if not active
       @update = @_update
       clearInterval(@_fpsCounter)
       delete @_fpsCounter

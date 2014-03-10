@@ -12,8 +12,8 @@ document.addEventListener "DOMContentLoaded", =>
   document.body.appendChild(@renderer.canvas)
   @renderer.resize()
 
-  @gameLoop = new Loop(@engine.tick, @renderer.render)
-  @gameLoop.start(60)
+  @loop = new Loop(@engine.tick, @renderer.render)
+  @loop.start(60)
 
   @renderer.canvas.addEventListener "click", (event) =>
     clicked = new Vec2(event.offsetX, event.offsetY)
