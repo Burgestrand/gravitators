@@ -8,8 +8,6 @@ class Rendering.Renderer
   render: (bleed) =>
     @clear()
 
-    @point({ x: 0, y: 0 }, "black")
-
     colors = ["red", "green", "blue", "magenta"]
 
     @physics.bounds.forEach (bound, idx) =>
@@ -49,30 +47,6 @@ class Rendering.Renderer
       @context.beginPath()
       fn()
       @context.closePath()
-
-  point: ({ x, y }, color = "#000000") ->
-    @path =>
-      @context.fillStyle = color
-      @context.arc(x, y, 3, 0, 2 * Math.PI, true)
-      @context.stroke()
-      @context.fill()
-
-  line: ({ n, d }, color = "#000000") ->
-    @path =>
-      @context.strokeStyle = color
-
-      nr = n.rotate(Math.PI / 2)
-      origin = Vec2.polar(n.angle() + Math.PI, d)
-      from = origin.add(nr.muls(d))
-      to = origin.add(nr.muls(-d))
-
-      @context.moveTo(from.x, from.y)
-      @context.lineTo(to.x, to.y)
-      @context.stroke()
-
-      @point(origin, "black")
-      @point(from, "white")
-      @point(to, "white")
 
   resize: ->
     @canvas.width = @canvas.offsetWidth

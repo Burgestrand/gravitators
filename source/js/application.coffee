@@ -21,4 +21,7 @@ document.addEventListener "DOMContentLoaded", =>
     clicked.y -= @renderer.currentTransform.translateY
     edgeIndex = @physics.bounds.findIndex (edge) ->
       edge.distance(clicked) < 0
-    @renderer.point(clicked)
+    if edgeIndex
+      console.log "Outside"
+    else
+      console.log "Inside"
