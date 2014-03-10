@@ -1,6 +1,7 @@
 class Rendering.Renderer
   constructor: (@physics) ->
     @canvas = document.createElement("canvas")
+    @transforms = []
     @currentTransform = new Rendering.Transform
     @context = @canvas.getContext("2d")
     @context.font = "16px Helvetica Neue"
@@ -29,13 +30,15 @@ class Rendering.Renderer
         @context.lineTo(b.x, b.y)
         @context.stroke()
 
-    @physics.bodies.forEach (body) ->
-      body.draw(this)
+    @physics.bodies.forEach (body) =>
+      @path => body.draw(this)
 
   isolate: (fn) ->
+    @transforms.push(@currentTransform.clone())
     @context.save()
     fn()
     @context.restore()
+    @currentTransform = @transforms.pop()
 
   clear: ->
     @isolate =>

@@ -6,7 +6,6 @@
 #= require_directory ./game
 
 document.addEventListener "DOMContentLoaded", =>
-
   @physics = new Physics.Engine(320, 320)
   @renderer = new Rendering.Renderer(@physics)
   document.body.appendChild(@renderer.canvas)
@@ -19,9 +18,7 @@ document.addEventListener "DOMContentLoaded", =>
     clicked = new Vec2(event.offsetX, event.offsetY)
     clicked.x -= @renderer.currentTransform.translateX
     clicked.y -= @renderer.currentTransform.translateY
-    edgeIndex = @physics.bounds.findIndex (edge) ->
-      edge.distance(clicked) < 0
-    if edgeIndex
-      console.log "Outside"
-    else
-      console.log "Inside"
+
+    circle = new Physics.Circle(3)
+    body = new Physics.Body(shape: circle, position: clicked)
+    @physics.bodies.push(body)
