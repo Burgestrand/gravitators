@@ -1,5 +1,5 @@
 class Rendering.Renderer
-  constructor: (@engine) ->
+  constructor: (@physics) ->
     @canvas = document.createElement("canvas")
     @currentTransform = new Rendering.Transform
     @context = @canvas.getContext("2d")
@@ -10,10 +10,28 @@ class Rendering.Renderer
 
     @point({ x: 0, y: 0 }, "black")
 
-    @engine.bounds.forEach (plane) =>
-      @line(plane)
+    colors = ["red", "green", "blue", "magenta"]
 
-    @engine.bodies.forEach (body) ->
+    @physics.bounds.forEach (bound, idx) =>
+      points = []
+
+      @edges.forEach (edge) =>
+        point = bound.intersection(edge)
+        points.push(point) if point
+
+      points.sort (p, a) ->
+        p.lengthSquared() - a.lengthSquared()
+
+      a = points[0]
+      b = points[1]
+
+      @path =>
+        @context.strokeStyle = colors[idx]
+        @context.moveTo(a.x, a.y)
+        @context.lineTo(b.x, b.y)
+        @context.stroke()
+
+    @physics.bodies.forEach (body) ->
       body.draw(this)
 
   isolate: (fn) ->
@@ -39,8 +57,10 @@ class Rendering.Renderer
       @context.stroke()
       @context.fill()
 
-  line: ({ n, d }) ->
+  line: ({ n, d }, color = "#000000") ->
     @path =>
+      @context.strokeStyle = color
+
       nr = n.rotate(Math.PI / 2)
       origin = Vec2.polar(n.angle() + Math.PI, d)
       from = origin.add(nr.muls(d))
@@ -57,6 +77,11 @@ class Rendering.Renderer
   resize: ->
     @canvas.width = @canvas.offsetWidth
     @canvas.height = @canvas.offsetHeight
+
+    @edges = [new Plane2(1, 0, @canvas.width * 0.5),
+              new Plane2(0, -1, @canvas.height * 0.5),
+              new Plane2(-1, 0, @canvas.width * 0.5),
+              new Plane2(0, 1, @canvas.height * 0.5)]
 
     # center the origin
     @_transform (matrix) ->

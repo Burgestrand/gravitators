@@ -10,7 +10,10 @@ class @Vec2
   constructor: (@x, @y) ->
 
   length: ->
-    Math.sqrt @dot(this)
+    Math.sqrt(@lengthSquared())
+
+  lengthSquared: ->
+    @dot(this)
 
   angle: ->
     Math.atan2(@y, @x)

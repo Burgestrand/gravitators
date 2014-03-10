@@ -7,18 +7,18 @@
 
 document.addEventListener "DOMContentLoaded", =>
 
-  @engine = new Physics.Engine(320, 320)
-  @renderer = new Rendering.Renderer(@engine)
+  @physics = new Physics.Engine(320, 320)
+  @renderer = new Rendering.Renderer(@physics)
   document.body.appendChild(@renderer.canvas)
   @renderer.resize()
 
-  @loop = new Loop(@engine.tick, @renderer.render)
+  @loop = new Loop(@physics.tick, @renderer.render)
   @loop.start(60)
 
   @renderer.canvas.addEventListener "click", (event) =>
     clicked = new Vec2(event.offsetX, event.offsetY)
     clicked.x -= @renderer.currentTransform.translateX
     clicked.y -= @renderer.currentTransform.translateY
-    edgeIndex = @engine.bounds.findIndex (edge) ->
+    edgeIndex = @physics.bounds.findIndex (edge) ->
       edge.distance(clicked) < 0
     @renderer.point(clicked)
