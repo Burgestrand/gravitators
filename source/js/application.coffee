@@ -6,24 +6,25 @@
 #= require_directory ./game
 
 document.addEventListener "DOMContentLoaded", =>
-  renderer = new Rendering.Renderer
-  document.body.appendChild(renderer.canvas)
-  renderer.resize()
 
-  { canvas, context } = renderer
+  @engine = new Physics.Engine(320, 320)
+  @renderer = new Rendering.Renderer()
+  document.body.appendChild(@renderer.canvas)
+  @renderer.resize()
 
-  @world = world = new World(canvas.width, canvas.height)
-  @renderer = renderer
+  render = (bleed) =>
+    @renderer.point({ x: 0, y: 0 }, "black")
+    colors = ["red", "green", "blue", "orange"]
+    @engine.bounds.forEach (plane, idx) =>
+      @renderer.line(plane, colors[idx])
 
-  context.point({ x: 0, y: 0 }, "black")
-  colors = ["red", "green", "blue", "orange"]
-  @world.bounds.forEach (plane, idx) ->
-    context.plane(plane, colors[idx])
+  @gameLoop = new Loop(@engine.tick, render)
+  @gameLoop.start(60)
 
-  canvas.addEventListener "click", (event) ->
+  @renderer.canvas.addEventListener "click", (event) =>
     clicked = new Vec2(event.offsetX, event.offsetY)
-    clicked.x -= renderer.currentTransform.translateX
-    clicked.y -= renderer.currentTransform.translateY
-    edgeIndex = edges.findIndex (edge) ->
+    clicked.x -= @renderer.currentTransform.translateX
+    clicked.y -= @renderer.currentTransform.translateY
+    edgeIndex = @engine.bounds.findIndex (edge) ->
       edge.distance(clicked) < 0
-    context.point(clicked, colors[edgeIndex] ? "white")
+    @renderer.point(clicked)
