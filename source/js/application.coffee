@@ -12,7 +12,7 @@ document.addEventListener "DOMContentLoaded", =>
 
   { canvas, context } = renderer
 
-  @world = new Physics.World(canvas.width, canvas.height)
+  @world = world = new World(canvas.width, canvas.height)
   @renderer = renderer
 
   context.point({ x: 0, y: 0 }, "black")
