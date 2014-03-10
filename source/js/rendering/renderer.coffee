@@ -5,7 +5,9 @@ class Rendering.Renderer
     @context = @canvas.getContext("2d")
     @context.font = "16px Helvetica Neue"
 
-  render: =>
+  render: (bleed) =>
+    @clear()
+
     @point({ x: 0, y: 0 }, "black")
 
     @engine.bounds.forEach (plane) =>
@@ -21,8 +23,8 @@ class Rendering.Renderer
 
   clear: ->
     @isolate =>
-      @_setTransform(Transform.Identity)
-      @clearRect(0, 0, @canvas.width, @canvas.height)
+      @_setTransform(Rendering.Transform.Identity)
+      @context.clearRect(0, 0, @canvas.width, @canvas.height)
 
   path: (fn) ->
     @isolate =>
