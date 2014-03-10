@@ -1,6 +1,8 @@
 class @World
   constructor: (@width, @height) ->
-    @gameLoop = new Loop(@tick.bind(@))
-    @gameLoop.start(2)
+    @gameLoop = new Loop(@tick.bind(@), @render.bind(@))
+    @gameLoop.start(60)
 
   tick: ->
+
+  render: ->
