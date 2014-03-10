@@ -2,7 +2,7 @@ class @Physics.Body
   constructor: ({ shape, position, velocity, acceleration } = {}) ->
     @shape = shape
     @position = position ? new Vec2(0, 0)
-    @velocity = velocity ? new Vec2(0, 0)
+    @velocity = velocity ? new Vec2(0, 20)
     @acceleration = acceleration ? new Vec2(0, 0)
 
   draw: (renderer) ->
