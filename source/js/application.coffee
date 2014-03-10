@@ -1,10 +1,10 @@
 #= require_self
 #= require_directory ./monkey_patches
 #= require_directory ./physics
-#= require_directory ./rendering
+#= require ./rendering
 
 document.addEventListener "DOMContentLoaded", =>
-  renderer = new Renderer
+  renderer = new Rendering.Renderer
   document.body.appendChild(renderer.canvas)
   renderer.resize()
 

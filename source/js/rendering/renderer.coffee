@@ -1,6 +1,6 @@
-class @Renderer
+class Rendering.Renderer
   constructor: (@canvas = document.createElement("canvas")) ->
-    @currentTransform = new Transform
+    @currentTransform = new Rendering.Transform
     @context = @canvas.getContext("2d")
     @context.font = "16px Helvetica Neue"
 

@@ -1,7 +1,7 @@
 # [ scaleX     shearY     0 ]
 # [ shearX     scaleY     0 ]
 # [ translateX translateY 1 ]
-class @Transform
+class @Rendering.Transform
   @Identity = new @({ scaleX: 1, scaleY: 1 })
 
   constructor: (matrix = Transform.Identity) ->
