@@ -4,11 +4,11 @@
 #= require_directory ./rendering
 
 document.addEventListener "DOMContentLoaded", =>
-  @renderer = new Renderer
-  document.body.appendChild(@renderer.canvas)
-  @renderer.resize()
+  renderer = new Renderer
+  document.body.appendChild(renderer.canvas)
+  renderer.resize()
 
-  { canvas, context } = @renderer
+  { canvas, context } = renderer
 
   edges = [new Plane2(1, 0, 200), new Plane2(0, -1, 200), new Plane2(-1, 0, 200), new Plane2(0, 1, 200)]
   context.point({ x: 0, y: 0 }, "black")
@@ -17,9 +17,12 @@ document.addEventListener "DOMContentLoaded", =>
     context.plane(e, colors[idx])
 
   canvas.addEventListener "click", (event) ->
-    clicked = new Vec2(event.offsetX, event.offsetY).sub(translation)
+    clicked = new Vec2(event.offsetX, event.offsetY)
+    clicked.x -= renderer.currentTransform.translateX
+    clicked.y -= renderer.currentTransform.translateY
     edgeIndex = edges.findIndex (edge) ->
       edge.distance(clicked) < 0
     context.point(clicked, colors[edgeIndex] ? "white")
 
   @world = new World(canvas.width / 2, canvas.height / 2)
+  @renderer = renderer
