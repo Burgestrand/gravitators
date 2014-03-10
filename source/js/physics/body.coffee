@@ -4,6 +4,7 @@ class @Physics.Body
     @position = position ? new Vec2(0, 0)
     @velocity = velocity ? new Vec2(0, 20)
     @acceleration = acceleration ? new Vec2(0, 0)
+    @gravityScale = Math.random() / 10
 
   draw: (renderer) ->
     renderer._transform (matrix) =>

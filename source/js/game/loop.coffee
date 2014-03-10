@@ -21,7 +21,7 @@ class @Loop
 
   start: (fps = 60) ->
     @stop()
-    delta = (1000.0 / fps)
+    delta = (1000 / fps)
     clamp = delta * 10
     diff = 0
     previous = performance.now()
