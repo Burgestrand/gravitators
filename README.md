@@ -16,3 +16,12 @@ There is no timeline. However, there are a few things I’d like to have before 
 - Three levels (one containing a huge ring mass and a nice power up in the middle)
 - Power ups (speed bonus, reverse gravity, gravity push, invincibility)
 - Weapons (high-rate gun, spiral gun, gun firing backwards, exploding bullets)
+
+## Development
+
+```
+git clone git@github.com:Burgestrand/gravitators.git
+cd gravitators
+bundle
+rake server
+```
