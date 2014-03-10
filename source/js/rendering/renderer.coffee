@@ -1,8 +1,18 @@
 class Rendering.Renderer
-  constructor: (@canvas = document.createElement("canvas")) ->
+  constructor: (@engine) ->
+    @canvas = document.createElement("canvas")
     @currentTransform = new Rendering.Transform
     @context = @canvas.getContext("2d")
     @context.font = "16px Helvetica Neue"
+
+  render: =>
+    @point({ x: 0, y: 0 }, "black")
+
+    @engine.bounds.forEach (plane) =>
+      @line(plane)
+
+    @engine.bodies.forEach (body) ->
+      body.draw(this)
 
   isolate: (fn) ->
     @context.save()
@@ -27,10 +37,8 @@ class Rendering.Renderer
       @context.stroke()
       @context.fill()
 
-  line: ({ n, d }, color = "#000000") ->
+  line: ({ n, d }) ->
     @path =>
-      @context.strokeStyle = color
-
       nr = n.rotate(Math.PI / 2)
       origin = Vec2.polar(n.angle() + Math.PI, d)
       from = origin.add(nr.muls(d))

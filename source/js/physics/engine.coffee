@@ -4,6 +4,6 @@ class Physics.Engine
                new Plane2(0, -1, @height / 2),
                new Plane2(-1, 0, @width / 2),
                new Plane2(0, 1, @height / 2)]
-    @entities = []
+    @bodies = []
 
-  tick: ->
+  tick: =>

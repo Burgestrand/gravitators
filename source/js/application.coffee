@@ -8,17 +8,11 @@
 document.addEventListener "DOMContentLoaded", =>
 
   @engine = new Physics.Engine(320, 320)
-  @renderer = new Rendering.Renderer()
+  @renderer = new Rendering.Renderer(@engine)
   document.body.appendChild(@renderer.canvas)
   @renderer.resize()
 
-  render = (bleed) =>
-    @renderer.point({ x: 0, y: 0 }, "black")
-    colors = ["red", "green", "blue", "orange"]
-    @engine.bounds.forEach (plane, idx) =>
-      @renderer.line(plane, colors[idx])
-
-  @gameLoop = new Loop(@engine.tick, render)
+  @gameLoop = new Loop(@engine.tick, @renderer.render)
   @gameLoop.start(60)
 
   @renderer.canvas.addEventListener "click", (event) =>
