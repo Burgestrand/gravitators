@@ -1,6 +1,6 @@
 class @Vec2
   @Origin = new Vec2(0, 0)
-  @Id = new Vec2(1, 1)
+  @Identity = new Vec2(1, 1)
 
   @polar = (angle, length) ->
     x = Math.cos(angle) * length
