@@ -30,6 +30,13 @@ class Rendering.Renderer
         @context.lineTo(b.x, b.y)
         @context.stroke()
 
+      @path =>
+        @context.moveTo(a.x, a.y)
+        @context.arc(a.x, a.y, 3, 0, 2 * Math.PI, true)
+        @context.moveTo(b.x, b.y)
+        @context.arc(b.x, b.y, 3, 0, 2 * Math.PI, true)
+        @context.stroke()
+
     @physics.bodies.forEach (body) =>
       @path => body.draw(this)
 
