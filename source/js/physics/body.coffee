@@ -4,7 +4,7 @@ class @Physics.Body extends GameObject
 
   @attribute "velocity", value: -> new Vec2(0, 0)
   @attribute "acceleration", value: -> new Vec2(0, 0)
-  @attribute "gravityScale", value: -> 0
+  @attribute "gravityScale", value: -> 1
 
   draw: (renderer) ->
     renderer._transform (matrix) =>
