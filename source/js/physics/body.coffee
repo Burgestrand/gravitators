@@ -7,7 +7,4 @@ class @Physics.Body extends GameObject
   @attribute "gravityScale", value: -> 1
 
   draw: (renderer) ->
-    renderer._transform (matrix) =>
-      matrix.translateX += @position.x
-      matrix.translateY += @position.y
     @shape?.draw(renderer)
