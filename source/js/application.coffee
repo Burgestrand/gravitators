@@ -18,13 +18,17 @@ document.addEventListener "DOMContentLoaded", =>
     clicked = new Vec2(event.offsetX, event.offsetY)
     clicked.x -= @renderer.currentTransform.translateX
     clicked.y -= @renderer.currentTransform.translateY
-    circle = new Physics.Circle(position: clicked, radius: 10)
+
+    shape = if Math.random() > 0.5
+      new Physics.Circle(position: clicked, radius: 10)
+    else
+      new Physics.Rectangle(position: clicked, width: 10, height: 10)
 
     x = Math.random() * 100
     xs = (Math.random() - 0.5).signum()
     y = Math.random() * 100
     ys = (Math.random() - 0.5).signum()
     velocity = new Vec2(x * xs, y * ys)
-    body = new Physics.Body(shape: circle, velocity: velocity)
+    body = new Physics.Body(shape: shape, velocity: velocity)
 
     @physics.bodies.push(body)

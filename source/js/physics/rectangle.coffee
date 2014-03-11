@@ -13,8 +13,8 @@ class @Physics.Rectangle extends Physics.Shape
     context.rect(@min.x, @min.y, @width, @height)
 
     context.moveTo(@min.x, @min.y)
-    context.arc(@min.x, @min.y, 3, 0, 2 * Math.PI, true)
+    context.arc(@min.x, @min.y, 1, 0, 2 * Math.PI, true)
     context.moveTo(@max.x, @max.y)
-    context.arc(@max.x, @max.y, 3, 0, 2 * Math.PI, true)
+    context.arc(@max.x, @max.y, 1, 0, 2 * Math.PI, true)
 
     context.stroke()
