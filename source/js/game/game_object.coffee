@@ -8,14 +8,19 @@ class @GameObject
     @attributes[name] = options
 
     prop = "_#{name}"
-    getter = options.get ? -> @[prop]
-    setter = options.set ? (v) -> @[prop] = v
-    Object.defineProperty(@prototype, name, get: getter, set: setter)
+    get = options.get ? -> @[prop]
+    set = options.set ? (v) -> @[prop] = v
+    @property(name, { get, set })
 
   @delegate: (name, options = {}) ->
-    getter = -> @[options.to]?[name]
-    setter = (v) -> @[options.to][name] = v
-    Object.defineProperty(@prototype, name, get: getter, set: setter)
+    get = -> @[options.to]?[name]
+    set = (v) -> @[options.to][name] = v
+    @property(name, { get, set })
+
+  @property: (name, options = {}) ->
+    options.get ?= -> throw new Error("get #{name} is not implemented")
+    options.set ?= -> throw new Error("get #{name} is not implemented")
+    Object.defineProperty(@prototype, name, options)
 
   constructor: (attributes = {}) ->
     for name, options of @constructor.attributes
