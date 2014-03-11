@@ -1,9 +1,9 @@
 #= require_self
 #= require_directory ./monkey_patches
 #= require_directory ./math
+#= require_directory ./game
 #= require ./physics
 #= require ./rendering
-#= require_directory ./game
 
 document.addEventListener "DOMContentLoaded", =>
   @physics = new Physics.Engine(320, 320)
@@ -18,7 +18,13 @@ document.addEventListener "DOMContentLoaded", =>
     clicked = new Vec2(event.offsetX, event.offsetY)
     clicked.x -= @renderer.currentTransform.translateX
     clicked.y -= @renderer.currentTransform.translateY
+    circle = new Physics.Circle(position: clicked, radius: 10)
 
-    circle = new Physics.Circle(3)
-    body = new Physics.Body(shape: circle, position: clicked)
+    x = Math.random() * 100
+    xs = (Math.random() - 0.5).signum()
+    y = Math.random() * 100
+    ys = (Math.random() - 0.5).signum()
+    velocity = new Vec2(x * xs, y * ys)
+    body = new Physics.Body(shape: circle, velocity: velocity)
+
     @physics.bodies.push(body)

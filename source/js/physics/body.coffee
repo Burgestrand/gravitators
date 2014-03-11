@@ -1,10 +1,10 @@
-class @Physics.Body
-  constructor: ({ shape, position, velocity, acceleration } = {}) ->
-    @shape = shape
-    @position = position ? new Vec2(0, 0)
-    @velocity = velocity ? new Vec2(0, 20)
-    @acceleration = acceleration ? new Vec2(0, 0)
-    @gravityScale = Math.random() / 10
+class @Physics.Body extends GameObject
+  @attribute "shape", value: -> new Physics.Circle(1)
+  @delegate "position", to: "shape"
+
+  @attribute "velocity", value: -> new Vec2(0, 0)
+  @attribute "acceleration", value: -> new Vec2(0, 0)
+  @attribute "gravityScale", value: -> 0
 
   draw: (renderer) ->
     renderer._transform (matrix) =>
