@@ -6,15 +6,12 @@ class @Physics.Rectangle extends Physics.Shape
     new Vec2(@width, @height)
   @property "min", get: ->
     @position.sub(@size.divs(2))
-  @property "max", get: ->
-    @position.add(@size.divs(2))
+
+  @property "BS", get: ->
+    position = @position
+    radius = Math.max(@width, @height) / 2
+    new Physics.Circle({ position, radius })
 
   draw: ({ context }) ->
     context.rect(@min.x, @min.y, @width, @height)
-
-    context.moveTo(@min.x, @min.y)
-    context.arc(@min.x, @min.y, 1, 0, 2 * Math.PI, true)
-    context.moveTo(@max.x, @max.y)
-    context.arc(@max.x, @max.y, 1, 0, 2 * Math.PI, true)
-
     context.stroke()
