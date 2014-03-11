@@ -42,6 +42,9 @@ class @Vec2
   div: ({ x, y }) ->
     new Vec2(@x / x, @y / y)
 
+  subs: (n) ->
+    @sub({ x: n, y: n })
+
   muls: (n) ->
     @mul({ x: n, y: n })
 
