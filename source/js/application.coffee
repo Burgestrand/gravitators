@@ -3,11 +3,10 @@
 #= require_directory ./math
 #= require_directory ./game
 #= require ./physics
-#= require ./rendering
 
 document.addEventListener "DOMContentLoaded", =>
-  @physics = new Physics.Engine(320, 320)
-  @renderer = new Rendering.Renderer(@physics)
+  @physics = new Physics.Engine(620, 620)
+  @renderer = new Physics.Renderer(@physics)
   document.body.appendChild(@renderer.canvas)
   @renderer.resize()
 
@@ -16,8 +15,7 @@ document.addEventListener "DOMContentLoaded", =>
 
   @renderer.canvas.addEventListener "click", (event) =>
     clicked = new Vec2(event.offsetX, event.offsetY)
-    clicked.x -= @renderer.currentTransform.translateX
-    clicked.y -= @renderer.currentTransform.translateY
+    clicked = clicked.transform(@renderer.currentTransform.inverse())
 
     shape = if Math.random() > 0.5
       new Physics.Circle(position: clicked, radius: 10)

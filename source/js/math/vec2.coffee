@@ -54,5 +54,12 @@ class @Vec2
   divs: (n) ->
     @div({ x: n, y: n })
 
+  transform: (m) ->
+    x = m.scaleX * @x + m.shearX * @y + m.translateX # ax + bx + c
+    y = m.shearY * @x + m.scaleY * @y + m.translateY # dy + ey + f
+    new Vec2(x, y)
+
   toString: ->
-    "(#{@x},#{@y})"
+    x = Math.round(@x, 2)
+    y = Math.round(@y, 2)
+    "(#{x},#{y})"

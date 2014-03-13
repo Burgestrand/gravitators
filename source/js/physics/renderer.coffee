@@ -1,8 +1,8 @@
-class Rendering.Renderer
+class @Physics.Renderer
   constructor: (@physics) ->
     @canvas = document.createElement("canvas")
     @transforms = []
-    @currentTransform = new Rendering.Transform
+    @currentTransform = new Transform
     @context = @canvas.getContext("2d")
     @context.font = "16px Helvetica Neue"
 
@@ -10,6 +10,10 @@ class Rendering.Renderer
     @clear()
 
     colors = ["red", "green", "blue", "magenta"]
+
+    @path =>
+      @context.arc(0, 0, 3, 0, 2 * Math.PI, true)
+      @context.stroke()
 
     @physics.bounds.forEach (bound, idx) =>
       points = []
@@ -49,7 +53,7 @@ class Rendering.Renderer
 
   clear: ->
     @isolate =>
-      @_setTransform(Rendering.Transform.Identity)
+      @_setTransform(Transform.Identity)
       @context.clearRect(0, 0, @canvas.width, @canvas.height)
 
   path: (fn) ->
@@ -69,8 +73,12 @@ class Rendering.Renderer
 
     # center the origin
     @_transform (matrix) ->
-      matrix.translateX = @canvas.width * 0.5
-      matrix.translateY = @canvas.height * 0.5
+      matrix.translate({ x: @canvas.width * 0.5, y: @canvas.height * 0.5 })
+
+  zoom: (level) ->
+    @_transform (matrix) ->
+      level = 1 / level
+      matrix.scale({ x: level, y: level })
 
   _transform: (fn) ->
     fn.call(@, @currentTransform) if fn
