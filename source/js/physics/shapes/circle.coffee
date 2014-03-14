@@ -5,5 +5,5 @@ class @Physics.Circle extends Physics.Shape
     this
 
   draw: ({ context }) ->
-    context.arc(@position.x, @position.y, @radius, 0, 2 * Math.PI, true)
+    context.arc(0, 0, @radius, 0, 2 * Math.PI, true)
     context.stroke()

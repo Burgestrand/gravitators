@@ -8,7 +8,7 @@ class @Physics.Rectangle extends Physics.Shape
     new Physics.Circle({ position, radius })
 
   draw: ({ context }) ->
-    x = @position.x - (@width / 2)
-    y = @position.y - (@height / 2)
+    x = -(@width / 2)
+    y = -(@height / 2)
     context.rect(x, y, @width, @height)
     context.stroke()
