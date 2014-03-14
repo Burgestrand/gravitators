@@ -1,5 +1,5 @@
 class @Physics.Body extends GameObject
-  @attribute "shape", value: -> new Physics.Circle(1)
+  @attribute "shape", value: -> new Physics.Circle(radius: 1)
   @delegate "position", to: "shape"
   @delegate "BS", to: "shape"
 

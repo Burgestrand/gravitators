@@ -13,6 +13,13 @@ class @GameObject
     @property(name, { get, set })
 
   @delegate: (name, options = {}) ->
+    unless @hasOwnProperty("delegates")
+      @delegates = if @delegates
+        Object.create(@delegates)
+      else
+        {}
+    @delegates[name] = options
+
     get = -> @[options.to]?[name]
     set = (v) -> @[options.to][name] = v
     @property(name, { get, set })
@@ -25,6 +32,10 @@ class @GameObject
   constructor: (attributes = {}) ->
     for name, options of @constructor.attributes
       @[name] = attributes[name] ? options.value?.call(this)
+      delete attributes[name]
+
+    for own name, value of attributes when name of @constructor.delegates
+      @[name] = value
       delete attributes[name]
 
     extras = Object.getOwnPropertyNames(attributes)
