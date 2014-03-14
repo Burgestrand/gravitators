@@ -9,8 +9,6 @@ class @Physics.Renderer
   render: (bleed) =>
     @clear()
 
-    colors = ["red", "green", "blue", "magenta"]
-
     @path =>
       @context.arc(0, 0, 3, 0, 2 * Math.PI, true)
       @context.stroke()
@@ -29,12 +27,11 @@ class @Physics.Renderer
       b = points[1]
 
       @path =>
-        @context.strokeStyle = colors[idx]
+        @context.strokeStyle = "magenta"
         @context.moveTo(a.x, a.y)
         @context.lineTo(b.x, b.y)
         @context.stroke()
 
-      @path =>
         @context.moveTo(a.x, a.y)
         @context.arc(a.x, a.y, 3, 0, 2 * Math.PI, true)
         @context.moveTo(b.x, b.y)
