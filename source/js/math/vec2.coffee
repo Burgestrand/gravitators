@@ -60,11 +60,13 @@ class @Vec2
     new Vec2(x, y)
 
   itransform: (m) ->
-    x = (@x - m.translateX) * (1 / m.scaleX)
-    y = (@y - m.translateY) * (1 / m.scaleY)
-    # Solve for x, and y:
-    # @x - m.translateX = m.scaleX * x + m.shearX * y
-    # @y - m.translateY = m.shearY * x + m.scaleY * y
+    determinant = m.scaleX * m.scaleY - m.shearX * m.shearY
+    if determinant is 0
+      throw new Error("inverse transform of #{@} with #{m} is not possible")
+    x_ = @x - m.translateX
+    y_ = @y - m.translateY
+    x = (x_ * m.scaleY - y_ * m.shearX) / determinant
+    y = (y_ * m.scaleX - x_ * m.shearY) / determinant
     new Vec2(x, y)
 
   toString: ->
