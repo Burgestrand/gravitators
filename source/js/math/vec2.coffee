@@ -1,13 +1,18 @@
 class @Vec2
-  @Origin = new Vec2(0, 0)
-  @Identity = new Vec2(1, 1)
-
   @polar = (angle, length) ->
     x = Math.cos(angle) * length
     y = Math.sin(angle) * length
     new @(x, y)
 
   constructor: (@x, @y) ->
+
+  set: ({ @x, @y }) ->
+    this
+
+  clear: ->
+    @x = 0
+    @y = 0
+    this
 
   length: ->
     Math.sqrt(@lengthSquared())
@@ -28,36 +33,56 @@ class @Vec2
   rotate: (r) ->
     x = @x * Math.cos(r) - @y * Math.sin(r)
     y = @x * Math.sin(r) + @y * Math.cos(r)
-    new Vec2(x, y)
+    @x = x
+    @y = y
+    this
 
   add: ({ x, y }) ->
-    new Vec2(@x + x, @y + y)
+    @x += x
+    @y += y
+    this
 
   sub: ({ x, y }) ->
-    new Vec2(@x - x, @y - y)
+    @x -= x
+    @y -= y
+    this
 
   mul: ({ x, y }) ->
-    new Vec2(@x * x, @y * y)
+    @x *= x
+    @y *= y
+    this
 
   div: ({ x, y }) ->
-    new Vec2(@x / x, @y / y)
+    @x /= x
+    @y /= y
+    this
 
   adds: (n) ->
-    @add({ x: n, y: n })
+    @x += n
+    @y += n
+    this
 
   subs: (n) ->
-    @sub({ x: n, y: n })
+    @x -= n
+    @y -= n
+    this
 
   muls: (n) ->
-    @mul({ x: n, y: n })
+    @x *= n
+    @y *= n
+    this
 
   divs: (n) ->
-    @div({ x: n, y: n })
+    @x /= n
+    @y /= n
+    this
 
   transform: (m) ->
     x = m.scaleX * @x + m.shearX * @y + m.translateX # ax + bx + c
     y = m.shearY * @x + m.scaleY * @y + m.translateY # dy + ey + f
-    new Vec2(x, y)
+    @x = x
+    @y = y
+    this
 
   itransform: (m) ->
     determinant = m.scaleX * m.scaleY - m.shearX * m.shearY
@@ -65,9 +90,9 @@ class @Vec2
       throw new Error("inverse transform of #{@} with #{m} is not possible")
     x_ = @x - m.translateX
     y_ = @y - m.translateY
-    x = (x_ * m.scaleY - y_ * m.shearX) / determinant
-    y = (y_ * m.scaleX - x_ * m.shearY) / determinant
-    new Vec2(x, y)
+    @x = (x_ * m.scaleY - y_ * m.shearX) / determinant
+    @y = (y_ * m.scaleX - x_ * m.shearY) / determinant
+    this
 
   toString: ->
     x = Math.round(@x, 2)
