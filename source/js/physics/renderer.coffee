@@ -53,7 +53,7 @@ class @Physics.Renderer
 
   clear: ->
     @isolate =>
-      @_setTransform(Transform.Identity)
+      @setTransform(Transform.Identity)
       @context.clearRect(0, 0, @canvas.width, @canvas.height)
 
   path: (fn) ->
@@ -72,17 +72,15 @@ class @Physics.Renderer
               new Plane2(0, 1, @canvas.height * 0.5)]
 
     # center the origin
-    @_transform (matrix) ->
+    @transform (matrix, renderer) =>
       matrix.translate({ x: @canvas.width * 0.5, y: @canvas.height * 0.5 })
+      matrix.scale(x: 0.5, y: -0.5)
+      # matrix.rotate(Math.PI / 4)
 
-  zoom: (level) ->
-    @_transform (matrix) ->
-      level = 1 / level
-      matrix.scale({ x: level, y: level })
+  transform: (fn) ->
+    fn(@currentTransform, @) if fn
+    @setTransform(@currentTransform)
 
-  _transform: (fn) ->
-    fn.call(@, @currentTransform) if fn
-    @_setTransform(@currentTransform)
-
-  _setTransform: (matrix) ->
+  setTransform: (matrix) ->
+    @currentTransform = matrix
     @context.setTransform(matrix.scaleX, matrix.shearX, matrix.shearY, matrix.scaleY, matrix.translateX, matrix.translateY)
