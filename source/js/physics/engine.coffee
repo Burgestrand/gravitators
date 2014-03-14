@@ -10,26 +10,36 @@ class Physics.Engine
   tick: (delta) =>
     fps = 1000 / delta
 
-    bodies = @bodies[0..-1]
-    bodies.forEach (body, index) =>
-      # Integration
+    @bodies.forEach (body) =>
       gravity = @gravity.muls(body.gravityScale)
       moved = body.velocity.divs(fps)
       accelerated = body.acceleration.add(gravity).divs(fps)
-      { BS } = body
-
       body.position = body.position.add(moved)
       body.velocity = body.velocity.add(accelerated)
 
-      collidingEdges = @bounds.findAll (edge) ->
+    destroyed = {}
+
+    collider = (body, index) =>
+      { BS } = body
+
+      collidingEdge = @bounds.find (edge) ->
         (edge.distance(BS.position) - BS.radius) < 0
 
-      collidingBodies = bodies[index + 1..-1].findAll (otherBody, otherIndex) =>
+      destroyed[index] or= collidingEdge
+
+      for otherIndex in [index + 1...@bodies.length]
+        otherBody = @bodies[otherIndex]
         otherBS = otherBody.BS
         distance = BS.position.sub(otherBS.position)
         radii = BS.radius + otherBS.radius
-        distance.lengthSquared() <= radii * radii
+        if distance.lengthSquared() <= radii * radii
+          destroyed[index] or= otherBody
+          destroyed[otherIndex] or= body
 
-      # TODO: do something sensible
-      if collidingEdges.length or collidingBodies.length
-        @bodies.splice(index, 1)
+      if destroyed[index]
+        body.collide?(destroyed[index], this)
+        false
+      else
+        true
+
+    @bodies = @bodies.filter(collider)
