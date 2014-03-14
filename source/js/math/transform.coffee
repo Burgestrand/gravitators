@@ -16,22 +16,24 @@ class @Transform
   translate: (v) ->
     @translateX += v.x * @scaleX + v.y * @shearX
     @translateY += v.x * @shearY + v.y * @scaleY
+    this
 
   scale: (v) ->
     @scaleX *= v.x
     @shearX *= v.x
     @shearY *= v.y
     @scaleY *= v.y
+    this
 
-  inverse: ->
-    # transposed rotation, negated translation
-    new Transform({
-      # TODO: rotation (shear)
-      scaleX: 1 / @scaleX,
-      scaleY: 1 / @scaleY,
-      translateX: -@translateX * 1 / @scaleX,
-      translateY: -@translateY * 1 / @scaleY
-    })
+  rotate: (r) ->
+    cos = Math.cos(r)
+    sin = Math.sin(r)
+    { scaleX, shearX, shearY, scaleY } = @
+    @scaleX =  cos * scaleX + sin * shearX
+    @shearX = -sin * scaleX + cos * shearX
+    @shearY =  cos * shearY + sin * scaleY
+    @scaleY = -sin * shearY + cos * scaleY
+    this
 
   clone: ->
     new Transform(@)
