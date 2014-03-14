@@ -5,7 +5,7 @@ class Physics.Engine
                new Plane2(-1, 0, @width / 2),
                new Plane2(0, 1, @height / 2)]
     @bodies = []
-    @gravity = new Vec2(0, 9.82)
+    @gravity = new Vec2(0, -9.82)
 
   tick: (delta) =>
     fps = 1000 / delta

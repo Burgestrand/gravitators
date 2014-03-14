@@ -59,6 +59,14 @@ class @Vec2
     y = m.shearY * @x + m.scaleY * @y + m.translateY # dy + ey + f
     new Vec2(x, y)
 
+  itransform: (m) ->
+    x = (@x - m.translateX) * (1 / m.scaleX)
+    y = (@y - m.translateY) * (1 / m.scaleY)
+    # Solve for x, and y:
+    # @x - m.translateX = m.scaleX * x + m.shearX * y
+    # @y - m.translateY = m.shearY * x + m.scaleY * y
+    new Vec2(x, y)
+
   toString: ->
     x = Math.round(@x, 2)
     y = Math.round(@y, 2)

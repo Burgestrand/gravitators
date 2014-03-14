@@ -15,7 +15,7 @@ document.addEventListener "DOMContentLoaded", =>
 
   @renderer.canvas.addEventListener "click", (event) =>
     clicked = new Vec2(event.offsetX, event.offsetY)
-    clicked = clicked.transform(@renderer.currentTransform.inverse())
+    clicked = clicked.itransform(@renderer.currentTransform)
 
     shape = if Math.random() > 0.5
       new Physics.Circle(position: clicked, radius: 10)

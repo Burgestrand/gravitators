@@ -74,7 +74,7 @@ class @Physics.Renderer
     # center the origin
     @transform (matrix, renderer) =>
       matrix.translate({ x: @canvas.width * 0.5, y: @canvas.height * 0.5 })
-      matrix.scale(x: 0.5, y: -0.5)
+      matrix.scale(x: 1.0, y: -1)
       # matrix.rotate(Math.PI / 4)
 
   transform: (fn) ->
