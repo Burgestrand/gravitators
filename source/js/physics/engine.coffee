@@ -30,14 +30,17 @@ class Physics.Engine
       body.position.add(velocity)
 
     # Check for collisions
-    destroyed = {}
+    collisions = {}
+    event = {}
+
     @actors = @actors.filter (actor, index) =>
       { BS } = actor.body
 
-      collidingEdge = @bounds.find (edge) ->
-        (edge.distance(BS.position) - BS.radius) < 0
+      collisions[index] or= []
 
-      destroyed[index] or= collidingEdge
+      for edge in @bounds
+        if (edge.distance(BS.position) - BS.radius) < 0
+          collisions[index].push(edge)
 
       for otherIndex in [index + 1...@actors.length]
         otherActor = @actors[otherIndex]
@@ -46,11 +49,17 @@ class Physics.Engine
         distance = BS.position.clone().sub(otherBS.position)
         radii = BS.radius + otherBS.radius
         if distance.lengthSquared() <= radii * radii
-          destroyed[index] or= otherActor
-          destroyed[otherIndex] or= actor
+          collisions[otherIndex] or= []
+          collisions[otherIndex].push(actor)
+          collisions[index].push(otherActor)
 
-      if destroyed[index]
-        actor.collide?(destroyed[index], this)
-        false
-      else
-        true
+      collided = false
+
+      for collision in collisions[index]
+        event.prevented = false
+        event.collision = collision
+        actor.collide(event, this)
+        collided or= not event.prevented
+
+      # keep if
+      not collided
