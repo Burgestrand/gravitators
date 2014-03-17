@@ -25,10 +25,17 @@ document.addEventListener "DOMContentLoaded", =>
 
     @physics.bodies.push(body)
 
+@spawn = (n = 1) =>
+  for i in [0...n]
+    s = @physics.width * 0.8
+    x = (Math.random() * s - s / 2)
+    y = (Math.random() * s - s / 2)
+    position = new Vec2(x, y)
+
     shape = if Math.random() > 0.5
-      new Physics.Circle(position: clicked, radius: 10)
+      new Physics.Circle(position: position, radius: 10)
     else
-      new Physics.Rectangle(position: clicked, width: 10, height: 10)
+      new Physics.Rectangle(position: position, width: 10, height: 10)
 
     x = Math.random() * 100
     xs = (Math.random() - 0.5).signum()
