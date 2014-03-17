@@ -5,7 +5,7 @@ class Physics.Engine
                new Plane2(-1, 0, @width / 2),
                new Plane2(0, 1, @height / 2)]
     @actors = []
-    @gravity = new Vec2(0, -9.82)
+    @gravity = new Vec2(0, -50)
 
   addActor: (actor) ->
     @actors.push(actor)
@@ -17,16 +17,16 @@ class Physics.Engine
   update: (fps) =>
     # Update all actors
     @actors.forEach (actor) =>
-      actor.update(fps)
+      actor.update(fps, this)
 
     # Accelerate and move all bodies
     @actors.forEach ({ body }) =>
-      force = new Vec2(0, 0)
-      force.add(@gravity).muls(body.gravityScale).add(body.force).divs(fps)
-      body.velocity.add(force)
+      gravity = @gravity.clone().muls(body.gravityScale).divs(fps)
+      body.force.add(gravity)
+      body.velocity.add(body.force)
+      body.force.clear()
 
-      velocity = new Vec2(0, 0)
-      velocity.set(body.velocity).divs(fps)
+      velocity = body.velocity.clone().divs(fps)
       body.position.add(velocity)
 
     # Check for collisions
@@ -43,8 +43,7 @@ class Physics.Engine
         otherActor = @actors[otherIndex]
         otherBody = otherActor.body
         otherBS = otherBody.BS
-        distance = new Vec2(0, 0)
-        distance.set(BS.position).sub(otherBS.position)
+        distance = BS.position.clone().sub(otherBS.position)
         radii = BS.radius + otherBS.radius
         if distance.lengthSquared() <= radii * radii
           destroyed[index] or= otherActor
