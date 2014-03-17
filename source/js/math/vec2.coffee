@@ -6,6 +6,9 @@ class @Vec2
 
   constructor: (@x, @y) ->
 
+  clone: ->
+    new Vec2(@x, @y)
+
   set: ({ @x, @y }) ->
     this
 
