@@ -38,7 +38,7 @@ class @Physics.Renderer
         @context.arc(b.x, b.y, 3, 0, 2 * Math.PI, true)
         @context.stroke()
 
-    @physics.bodies.forEach (body) =>
+    @physics.actors.forEach ({ body }) =>
       @path => body.draw(this)
 
   isolate: (fn) ->

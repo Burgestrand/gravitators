@@ -2,7 +2,7 @@
 #= require_directory ./vendor
 #= require_directory ./monkey_patches
 #= require_directory ./math
-#= require_directory ./game
+#= require ./game
 #= require ./physics
 
 document.addEventListener "DOMContentLoaded", =>
@@ -11,7 +11,7 @@ document.addEventListener "DOMContentLoaded", =>
   document.body.appendChild(@renderer.canvas)
   @renderer.resize()
 
-  @loop = new Loop(@physics.tick, @renderer.render)
+  @loop = new Loop(@physics.update, @renderer.render)
   @loop.start(60)
 
   @renderer.canvas.addEventListener "click", (event) =>
@@ -22,9 +22,12 @@ document.addEventListener "DOMContentLoaded", =>
     y = Math.random() * 100
     ys = (Math.random() - 0.5).signum()
     velocity = new Vec2(x * xs, y * ys)
-    body = new Ship(velocity: velocity, position: clicked)
+    ship = new Ship(velocity: velocity, position: clicked)
 
-    @physics.bodies.push(body)
+    @physics.addActor(new Actor(body: ship))
+
+  player = new Player()
+  @physics.addActor(player)
 
 @spawn = (n = 1) =>
   for i in [0...n]
@@ -43,6 +46,7 @@ document.addEventListener "DOMContentLoaded", =>
     y = Math.random() * 100
     ys = (Math.random() - 0.5).signum()
     velocity = new Vec2(x * xs, y * ys)
-    body = new Physics.Body(shape: shape, velocity: velocity)
+    body = new Physics.Body({ shape, velocity })
+    actor = new Actor({ body })
 
-    @physics.bodies.push(body)
+    @physics.addActor(actor)
