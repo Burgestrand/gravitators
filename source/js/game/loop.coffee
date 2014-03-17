@@ -1,5 +1,6 @@
 class @Loop
   constructor: (@update, @render) ->
+    @_fps = 60
 
   countFPS: (active) ->
     if active and not @_update
@@ -19,9 +20,9 @@ class @Loop
       delete @_update
       delete @fps
 
-  start: (fps = 60) ->
+  start: (@_fps = @_fps) ->
     @stop()
-    delta = 1000 / fps
+    delta = 1000 / @_fps
     clamp = delta * 10
     diff = 0
     previous = performance.now()
@@ -36,7 +37,7 @@ class @Loop
 
       # tick the physics forward by a deterministic time value
       while diff > delta
-        @update(fps, delta)
+        @update(@_fps, delta)
         diff -= delta
 
       # trigger a rendering with information of how far we are
