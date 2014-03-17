@@ -1,6 +1,7 @@
 class @GameObject
   @attribute: (name, options = {}) ->
-    unless @hasOwnProperty("attributes")
+    unless @attributesOwner is this
+      @attributesOwner = this
       @attributes = if @attributes
         Object.create(@attributes)
       else
