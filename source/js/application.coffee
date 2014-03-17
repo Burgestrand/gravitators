@@ -26,8 +26,18 @@ document.addEventListener "DOMContentLoaded", =>
 
     @physics.addActor(new Actor(body: ship))
 
-  player = new Player()
-  @physics.addActor(player)
+  key "p", =>
+    if not @loop.running
+      @loop.start()
+    else
+      @loop.stop()
+
+  key "1,2", (event, handler) =>
+    controls =
+      1: ["up", "left", "right", "down"]
+      2: ["w", "a", "d", "s"]
+    player = new Player(controls: controls[handler.key])
+    @physics.addActor(player)
 
 @spawn = (n = 1) =>
   for i in [0...n]
