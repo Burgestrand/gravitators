@@ -1,4 +1,5 @@
 #= require_self
+#= require_directory ./vendor
 #= require_directory ./monkey_patches
 #= require_directory ./math
 #= require_directory ./game
