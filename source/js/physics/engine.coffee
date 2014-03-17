@@ -55,9 +55,9 @@ class Physics.Engine
 
       collided = false
 
-      for collision in collisions[index]
+      for entity in collisions[index]
         event.prevented = false
-        event.collision = collision
+        event.entity = entity
         actor.collide(event, this)
         collided or= not event.prevented
 
