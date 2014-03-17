@@ -7,9 +7,8 @@ class Physics.Engine
     @bodies = []
     @gravity = new Vec2(0, -9.82)
 
-  tick: (delta) =>
-    fps = 1000 / delta
-
+  tick: (fps) =>
+    # Accelerate and move all bodies
     @bodies.forEach (body) =>
       force = new Vec2(0, 0)
       force.add(@gravity).muls(body.gravityScale).add(body.force).divs(fps)
@@ -19,9 +18,9 @@ class Physics.Engine
       velocity.set(body.velocity).divs(fps)
       body.position.add(velocity)
 
+    # Check for collisions
     destroyed = {}
-
-    collider = (body, index) =>
+    @bodies = @bodies.filter (body, index) =>
       { BS } = body
 
       collidingEdge = @bounds.find (edge) ->
@@ -45,4 +44,3 @@ class Physics.Engine
       else
         true
 
-    @bodies = @bodies.filter(collider)

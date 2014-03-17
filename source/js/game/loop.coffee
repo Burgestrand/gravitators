@@ -21,7 +21,7 @@ class @Loop
 
   start: (fps = 60) ->
     @stop()
-    delta = (1000 / fps)
+    delta = 1000 / fps
     clamp = delta * 10
     diff = 0
     previous = performance.now()
@@ -36,7 +36,7 @@ class @Loop
 
       # tick the physics forward by a deterministic time value
       while diff > delta
-        @update(delta)
+        @update(fps, delta)
         diff -= delta
 
       # trigger a rendering with information of how far we are
