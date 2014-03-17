@@ -12,8 +12,10 @@ class @Ship extends Physics.Body
     ]
     new Physics.Polygon({ points })
 
-  @attribute "color", value: -> "red"
+  @attribute "color", value: -> "#900"
 
   draw: ({ context }) ->
-    context.strokeStyle = @color
+    context.strokeStyle = "black"
     super
+    context.fillStyle = @color
+    context.fill()

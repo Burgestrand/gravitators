@@ -34,11 +34,11 @@ document.addEventListener "DOMContentLoaded", =>
 
   key "1,2", (event, handler) =>
     controls =
-      1: ["up", "left", "right", "down"]
-      2: ["w", "a", "d", "s"]
+      1: ["w", "a", "d", "s"]
+      2: ["up", "left", "right", "down"]
     colors =
-      1: "red"
-      2: "blue"
+      1: "#069"
+      2: "#930"
     player = new Player(controls: controls[handler.key], color: colors[handler.key])
     @physics.addActor(player)
 
