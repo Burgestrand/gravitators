@@ -39,7 +39,9 @@ class @Physics.Renderer
         @context.stroke()
 
     @physics.actors.forEach ({ body }) =>
-      @path => body.draw(this)
+      @path =>
+        @translate(body.position)
+        body.draw(this)
 
   isolate: (fn) ->
     @transforms.push(@currentTransform.clone())
@@ -69,12 +71,19 @@ class @Physics.Renderer
               new Plane2(0, 1, @canvas.height * 0.5)]
 
     # center the origin
-    @transform (matrix, renderer) =>
-      matrix.translate({ x: @canvas.width * 0.5, y: @canvas.height * 0.5 })
-      matrix.scale(x: 1.0, y: -1)
+    @translate({ x: @canvas.width * 0.5, y: @canvas.height * 0.5 })
+    @scale(x: 1.0, y: -1)
 
-  transform: (fn) ->
-    fn(@currentTransform, @) if fn
+  translate: (p) ->
+    @currentTransform.translate(p)
+    @setTransform(@currentTransform)
+
+  scale: (p) ->
+    @currentTransform.scale(p)
+    @setTransform(@currentTransform)
+
+  rotate: (r) ->
+    @currentTransform.rotate(r)
     @setTransform(@currentTransform)
 
   setTransform: (matrix) ->
