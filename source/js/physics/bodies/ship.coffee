@@ -11,3 +11,9 @@ class @Ship extends Physics.Body
       new Vec2(0, 0)
     ]
     new Physics.Polygon({ points })
+
+  @attribute "color", value: -> "red"
+
+  draw: ({ context }) ->
+    context.strokeStyle = @color
+    super

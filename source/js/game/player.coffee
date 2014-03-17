@@ -1,5 +1,7 @@
 class @Player extends Actor
   @attribute "body", value: -> new Ship()
+  @delegate "color", to: "body"
+
   @attribute "speed", value: -> 200
   @attribute "turnSpeed", value: -> Math.PI
 

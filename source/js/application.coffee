@@ -36,7 +36,10 @@ document.addEventListener "DOMContentLoaded", =>
     controls =
       1: ["up", "left", "right", "down"]
       2: ["w", "a", "d", "s"]
-    player = new Player(controls: controls[handler.key])
+    colors =
+      1: "red"
+      2: "blue"
+    player = new Player(controls: controls[handler.key], color: colors[handler.key])
     @physics.addActor(player)
 
 @spawn = (n = 1) =>
