@@ -3,9 +3,8 @@ class @Physics.Rectangle extends Physics.Shape
   @attribute "height", value: -> 0
 
   @property "BS", get: ->
-    position = @position
     radius = Math.max(@width, @height) / 2
-    new Physics.Circle({ position, radius })
+    new Physics.BoundingSphere(shape: this, radius: radius)
 
   draw: ({ context }) ->
     x = -(@width / 2)

@@ -9,7 +9,7 @@ class @Physics.Polygon extends Physics.Shape
       else
         maxSquared
     radius = Math.sqrt(@points.reduce(reducer, 0))
-    new Physics.Circle({ radius: radius, position: @position })
+    new Physics.BoundingSphere(shape: this, radius: radius)
 
   draw: ({ context }) ->
     context.moveTo(@points[0].x, @points[0].y)
