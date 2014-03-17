@@ -6,14 +6,12 @@ class @Player extends Actor
     new Weapon(speed: 100, owner: this)
 
   @attribute "speed", value: -> 200
+  @attribute "maxVelocity", value: -> 200
   @attribute "turnSpeed", value: -> Math.PI
 
   # Accelerate, Turn Left, Turn Right, Retardate, Shoot
   @attribute "controls", value: ->
     ["w", "a", "d", "s", "space"]
-
-  @property "weaponThrottler", get: ->
-    @_weaponThrottler ?= new Throttler(@shootSpeed)
 
   update: (fps, engine) ->
     [up, left, right, down, shoot] = @controls
