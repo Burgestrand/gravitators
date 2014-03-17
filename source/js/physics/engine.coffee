@@ -7,22 +7,17 @@ class Physics.Engine
     @bodies = []
     @gravity = new Vec2(0, -9.82)
 
-  withVector: (fn) ->
-    @_tmpvector or= new Vec2(0, 0)
-    @_tmpvector.clear(0, 0)
-    fn.call(fn, @_tmpvector)
-
   tick: (delta) =>
     fps = 1000 / delta
 
     @bodies.forEach (body) =>
-      @withVector (force) =>
-        force.add(@gravity).muls(body.gravityScale).add(body.force).divs(fps)
-        body.velocity.add(force)
+      force = new Vec2(0, 0)
+      force.add(@gravity).muls(body.gravityScale).add(body.force).divs(fps)
+      body.velocity.add(force)
 
-      @withVector (velocity) ->
-        velocity.set(body.velocity).divs(fps)
-        body.position.add(velocity)
+      velocity = new Vec2(0, 0)
+      velocity.set(body.velocity).divs(fps)
+      body.position.add(velocity)
 
     destroyed = {}
 
@@ -37,12 +32,12 @@ class Physics.Engine
       for otherIndex in [index + 1...@bodies.length]
         otherBody = @bodies[otherIndex]
         otherBS = otherBody.BS
-        @withVector (distance) =>
-          distance.set(BS.position).sub(otherBS.position)
-          radii = BS.radius + otherBS.radius
-          if distance.lengthSquared() <= radii * radii
-            destroyed[index] or= otherBody
-            destroyed[otherIndex] or= body
+        distance = new Vec2(0, 0)
+        distance.set(BS.position).sub(otherBS.position)
+        radii = BS.radius + otherBS.radius
+        if distance.lengthSquared() <= radii * radii
+          destroyed[index] or= otherBody
+          destroyed[otherIndex] or= body
 
       if destroyed[index]
         body.collide?(destroyed[index], this)
