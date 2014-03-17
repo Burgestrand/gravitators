@@ -34,8 +34,8 @@ document.addEventListener "DOMContentLoaded", =>
 
   key "1,2", (event, handler) =>
     controls =
-      1: ["w", "a", "d", "s"]
-      2: ["up", "left", "right", "down"]
+      1: ["w", "a", "d", "s", "space"]
+      2: ["up", "left", "right", "down", "enter"]
     colors =
       1: "#069"
       2: "#930"
