@@ -1,5 +1,5 @@
 class @Physics.Shape extends GameObject
-  @attribute "position", value: -> new Vec2(0, 0)
+  @attribute "position", value: -> vec2.fromValues(0, 0)
 
   @property "BS", get: ->
     throw new Error("not implemented")

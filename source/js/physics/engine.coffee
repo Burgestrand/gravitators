@@ -5,7 +5,7 @@ class Physics.Engine
                new Plane2(-1, 0, @width / 2),
                new Plane2(0, 1, @height / 2)]
     @actors = []
-    @gravity = new Vec2(0, -50)
+    @gravity = vec2.fromValues(0, -50)
 
   addActor: (actor) ->
     @actors.push(actor)
@@ -21,13 +21,17 @@ class Physics.Engine
 
     # Accelerate and move all bodies
     @actors.forEach ({ body }) =>
-      gravity = @gravity.clone().muls(body.gravityScale).divs(fps)
-      body.force.add(gravity)
-      body.velocity.add(body.force)
-      body.force.clear()
+      gravity = vec2.clone(@gravity)
+      vec2.multiply(gravity, gravity, vec2.fromValue(body.gravityScale))
+      vec2.divide(gravity, gravity, vec2.fromValue(fps))
 
-      velocity = body.velocity.clone().divs(fps)
-      body.position.add(velocity)
+      vec2.add(body.force, body.force, gravity)
+      vec2.add(body.velocity, body.velocity, body.force)
+      vec2.set(body.force, 0, 0)
+
+      velocity = vec2.clone(body.velocity)
+      vec2.divide(velocity, velocity, vec2.fromValue(fps))
+      vec2.add(body.position, body.position, velocity)
 
     # Check for collisions
     collisions = {}
@@ -46,9 +50,10 @@ class Physics.Engine
         otherActor = @actors[otherIndex]
         otherBody = otherActor.body
         otherBS = otherBody.BS
-        distance = BS.position.clone().sub(otherBS.position)
+        distance = vec2.clone(BS.position)
+        vec2.subtract(distance, distance, otherBS.position)
         radii = BS.radius + otherBS.radius
-        if distance.lengthSquared() <= radii * radii
+        if vec2.squaredLength(distance) <= radii * radii
           collisions[otherIndex] or= []
           collisions[otherIndex].push(actor)
           collisions[index].push(otherActor)

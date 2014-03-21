@@ -1,10 +1,10 @@
 class @Plane2
   constructor: (@a, @b, @c) ->
-    @n = new Vec2(@a, @b)
+    @n = vec2.fromValues(@a, @b)
     @d = @c
 
   distance: (p) ->
-    p.dot(@n) + @d
+    vec2.dot(p, @n) + @d
 
   intersection: ({ a, b, c }) ->
     denom = (@a * b - @b * a)
@@ -12,7 +12,7 @@ class @Plane2
     unless denom is 0
       x = (@c * b - @b * c) / denom
       y = (@a * c - @c * a) / denom
-      new Vec2(-x, -y)
+      vec2.fromValues(-x, -y)
 
   toString: ->
     "#{@n}@#{@d}"

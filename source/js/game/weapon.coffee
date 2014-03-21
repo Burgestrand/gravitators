@@ -9,7 +9,12 @@ class @Weapon extends GameObject
     @throttler.invoke =>
       ownerBody = @owner.body
       bulletSpeed = 100
-      position = Vec2.polar(ownerBody.direction, ownerBody.BS.radius + 1).add(ownerBody.position)
-      velocity = Vec2.polar(ownerBody.direction, bulletSpeed).add(ownerBody.velocity)
+
+      position = vec2.polar(ownerBody.direction, ownerBody.BS.radius + 1)
+      vec2.add(position, position, ownerBody.position)
+
+      velocity = vec2.polar(ownerBody.direction, bulletSpeed)
+      vec2.add(velocity, velocity, ownerBody.velocity)
+
       bullet = new Bullet({ position, velocity })
       engine.addActor(bullet)

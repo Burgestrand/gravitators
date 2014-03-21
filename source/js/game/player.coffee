@@ -21,5 +21,5 @@ class @Player extends Actor
     accelerates = if key.isPressed(up) then 1
     else if key.isPressed(down) then -1
     else 0
-    acceleration = Vec2.polar(@body.direction, (@speed * accelerates) / fps)
-    @body.force.add(acceleration)
+    acceleration = vec2.polar(@body.direction, (@speed * accelerates) / fps)
+    vec2.add(@body.force, @body.force, acceleration)

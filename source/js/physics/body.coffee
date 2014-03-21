@@ -3,9 +3,9 @@ class @Physics.Body extends GameObject
   @delegate "position", to: "shape"
   @delegate "BS", to: "shape"
 
-  @attribute "velocity", value: -> new Vec2(0, 0)
+  @attribute "velocity", value: -> vec2.fromValues(0, 0)
 
-  @attribute "force", value: -> new Vec2(0, 0)
+  @attribute "force", value: -> vec2.fromValues(0, 0)
   @attribute "gravityScale", value: -> 1
 
   draw: (renderer) ->

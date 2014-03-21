@@ -4,11 +4,11 @@ class @Ship extends Physics.Body
     width = 10
 
     points = [
-      new Vec2(0, 0),
-      new Vec2(-(length / 2), width),
-      new Vec2(length, 0),
-      new Vec2(-(length / 2), -width),
-      new Vec2(0, 0)
+      vec2.fromValues(0, 0),
+      vec2.fromValues(-(length / 2), width),
+      vec2.fromValues(length, 0),
+      vec2.fromValues(-(length / 2), -width),
+      vec2.fromValues(0, 0)
     ]
     new Physics.Polygon({ points })
 
