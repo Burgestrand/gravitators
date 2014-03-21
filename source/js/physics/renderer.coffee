@@ -2,7 +2,7 @@ class @Physics.Renderer
   constructor: (@physics) ->
     @canvas = document.createElement("canvas")
     @transforms = []
-    @currentTransform = new Transform
+    @currentTransform = mat2d.create()
     @context = @canvas.getContext("2d")
     @context.font = "16px Helvetica Neue"
 
@@ -44,7 +44,7 @@ class @Physics.Renderer
         body.draw(this)
 
   isolate: (fn) ->
-    @transforms.push(@currentTransform.clone())
+    @transforms.push(mat2d.clone(@currentTransform))
     @context.save()
     fn()
     @context.restore()
@@ -52,7 +52,7 @@ class @Physics.Renderer
 
   clear: ->
     @isolate =>
-      @setTransform(Transform.Identity)
+      @setTransform(mat2d.identity(@currentTransform))
       @context.clearRect(0, 0, @canvas.width, @canvas.height)
 
   path: (fn) ->
@@ -75,17 +75,18 @@ class @Physics.Renderer
     @scale(x: 1.0, y: -1)
 
   translate: (p) ->
-    @currentTransform.translate(p)
+    mat2d.translate(@currentTransform, @currentTransform, vec2.fromValues(p.x, p.y))
     @setTransform(@currentTransform)
 
   scale: (p) ->
-    @currentTransform.scale(p)
+    mat2d.scale(@currentTransform, @currentTransform, vec2.fromValues(p.x, p.y))
     @setTransform(@currentTransform)
 
   rotate: (r) ->
-    @currentTransform.rotate(r)
+    mat2d.rotate(@currentTransform, @currentTransform, r)
     @setTransform(@currentTransform)
 
   setTransform: (matrix) ->
     @currentTransform = matrix
-    @context.setTransform(matrix.scaleX, matrix.shearX, matrix.shearY, matrix.scaleY, matrix.translateX, matrix.translateY)
+    [ scaleX, shearX, shearY, scaleY, translateX, translateY ] = matrix
+    @context.setTransform(scaleX, shearX, shearY, scaleY, translateX, translateY)
