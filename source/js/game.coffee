@@ -1,10 +1,11 @@
 #= require_self
-#= require ./game/components
+#= require ./game/component
 #= require ./game/entity_manager
-#= require ./game/systems
+#= require ./game/system
 
 class @Game
   constructor: ->
+    @entities = new EntityManager()
     @systems = []
 
   register: (system, options = {}) ->

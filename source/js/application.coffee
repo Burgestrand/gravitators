@@ -6,16 +6,8 @@
 
 document.addEventListener "DOMContentLoaded", =>
   @game = new Game()
-  renderer = @game.register(new RenderingSystem(640, 640))
-  document.body.appendChild(renderer.canvas)
+  @renderer = @game.register(new System.Rendering(640, 640))
+  @renderer.appendTo(document.body)
   @game.start()
 
-  ticker = ->
-    output = []
-    for { system } in @game.systems
-      [ticks, system.ticks] = [system.ticks, 0]
-      output.push "#{system.constructor.name}: #{ticks}"
-    console.log output.join(", ")
-
-  setInterval(ticker, 1000)
-
+  @game.entities.create("Bullet")
