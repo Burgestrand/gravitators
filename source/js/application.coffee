@@ -3,29 +3,19 @@
 #= require_directory ./monkey_patches
 #= require_directory ./lib
 #= require ./game
-#= require ./physics
 
 document.addEventListener "DOMContentLoaded", =>
-  @physics = new Physics.Engine(640, 640)
-  @renderer = new Physics.Renderer(@physics)
-  document.body.appendChild(@renderer.canvas)
-  @renderer.resize()
+  @game = new Game()
+  renderer = @game.register(new RenderingSystem(640, 640))
+  document.body.appendChild(renderer.canvas)
+  @game.start()
 
-  @loop = new Loop(@physics.update, @renderer.render)
-  @loop.start(60)
+  ticker = ->
+    output = []
+    for { system } in @game.systems
+      [ticks, system.ticks] = [system.ticks, 0]
+      output.push "#{system.constructor.name}: #{ticks}"
+    console.log output.join(", ")
 
-  key "p", =>
-    if not @loop.running
-      @loop.start()
-    else
-      @loop.stop()
+  setInterval(ticker, 1000)
 
-  key "1,2", (event, handler) =>
-    controls =
-      1: ["w", "a", "d", "s", "space"]
-      2: ["up", "left", "right", "down", "enter"]
-    colors =
-      1: "#069"
-      2: "#930"
-    player = new Player(controls: controls[handler.key], color: colors[handler.key])
-    @physics.addActor(player)
