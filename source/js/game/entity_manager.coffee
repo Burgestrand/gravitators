@@ -2,37 +2,33 @@
 
 class @EntityManager
   constructor: ->
-    @ids = []
+    @ids = new IDPool
 
-  create: (entityName, options = {}) ->
-    id = @id()
+  create: (entityName) ->
+    id = @ids.create()
 
-    descriptor = {}
+    components = {}
     for component in Entities[entityName]
-      descriptor[component.name] = new component(id)
-    Object.freeze(descriptor)
+      components[component.name] = new component(id)
+    Object.freeze(components)
 
-    @[id] = descriptor
+    @[id] = components
     id
-
-  entitiesWith: (componentNames) ->
-    results = {}
-    for id in @ids
-      descriptor = @[id]
-      matches = true
-      for name in componentNames
-        matches = matches && (name of descriptor)
-      results[id] = descriptor if matches
-    results
 
   destroy: (id) ->
-    # TODO: this is bad for cache!
-    delete @[id]
+    @ids.release(id)
+    @[id] = null
 
-  id: ->
-    id = @ids.length
-    @ids.push(id)
-    id
+  entitiesWith: (componentNames) ->
+    entities = @
+    results = {}
+    @ids.forEach (id) ->
+      components = entities[id]
+      matches = true
+      for name in componentNames
+        matches = matches && (name of components)
+      results[id] = components if matches
+    results
 
 @Entities = {
   "Bullet": [Component.ID, Component.Position, Component.Renderable]
