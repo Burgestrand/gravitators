@@ -5,18 +5,23 @@
 
 class @Game
   constructor: ->
-    @systems = []
     @entities = new EntityManager(this)
+    @systems = {}
+    @_systems = []
 
   register: (system, options = {}) ->
+    name = system.constructor.name
     descriptor =
-      name: system.constructor.name
+      name: name
       system: system
       fps: options.fps
       lag: 0
       timestep: (1000 / options.fps)
       maximumLag: (1000 / options.fps) * 10
-    @systems.push(descriptor)
+    if @systems.hasOwnProperty(name)
+      throw new Error("system #{name} already registered!")
+    @systems[name] = system
+    @_systems.push(descriptor)
     system.setup(this)
     system
 
@@ -30,7 +35,7 @@ class @Game
       diff = now - previous
       previous = now
 
-      for descriptor in @systems
+      for descriptor in @_systems
         if descriptor.fps
           descriptor.lag += diff
 
