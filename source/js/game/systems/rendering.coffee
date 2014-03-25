@@ -18,7 +18,7 @@ class System.Rendering extends System
 
   draw: =>
     @drawing.clear()
-    for own id, descriptor of @engine.entities.entitiesWith(["Position", "Renderable"])
+    for own id, descriptor of @engine.entities.withComponents(["Position", "Shape"])
       p = descriptor["Position"].position
 
       @context.beginPath()

@@ -19,7 +19,7 @@ class @EntityManager
     @ids.release(id)
     @[id] = null
 
-  entitiesWith: (componentNames) ->
+  withComponents: (componentNames) ->
     entities = @
     results = {}
     @ids.forEach (id) ->
