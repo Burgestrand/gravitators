@@ -1,9 +1,9 @@
 #= require_self
-#= require ./game/component
-#= require ./game/entity_manager
-#= require ./game/system
+#= require ./component
+#= require ./entity_manager
+#= require ./system
 
-class @Game
+class @Engine
   constructor: ->
     @entities = new EntityManager(this)
     @systems = {}

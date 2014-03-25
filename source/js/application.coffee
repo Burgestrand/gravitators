@@ -2,12 +2,12 @@
 #= require_directory ./vendor
 #= require_directory ./monkey_patches
 #= require_directory ./lib
-#= require ./game
+#= require ./game/engine
 
 document.addEventListener "DOMContentLoaded", =>
-  @game = new Game()
-  @renderer = @game.register(new System.Rendering(640, 640))
+  @engine = new Engine()
+  @renderer = @engine.register(new System.Rendering(640, 640))
   @renderer.appendTo(document.body)
-  @game.start()
+  @engine.start()
 
-  @game.entities.create("Bullet")
+  @engine.entities.create("Bullet")
