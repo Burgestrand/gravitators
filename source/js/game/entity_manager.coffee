@@ -16,7 +16,8 @@ class @EntityManager
     id
 
   destroy: (id) ->
-    @ids.release(id)
+    unless @ids.release(id)
+      throw new Error("entity #{id} does not exist")
     @[id] = null
 
   withComponents: (componentNames) ->
