@@ -20,10 +20,10 @@ class @EntityManager
     @[id] = null
 
   withComponents: (componentNames) ->
-    entities = @
+    self = @
     results = {}
     @ids.forEach (id) ->
-      components = entities[id]
+      components = self[id]
       matches = true
       for name in componentNames
         matches = matches && (name of components)
