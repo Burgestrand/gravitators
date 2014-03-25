@@ -5,8 +5,8 @@
 
 class @Game
   constructor: ->
-    @entities = new EntityManager()
     @systems = []
+    @entities = new EntityManager(this)
 
   register: (system, options = {}) ->
     descriptor =

@@ -1,7 +1,7 @@
 #= require_self
 
 class @EntityManager
-  constructor: ->
+  constructor: (@engine) ->
     @ids = new ResourcePool
 
   create: (entityName) ->
@@ -9,7 +9,7 @@ class @EntityManager
 
     components = {}
     for component in Entities[entityName]
-      components[component.name] = new component(id)
+      components[component.name] = new component(@engine, id)
     Object.freeze(components)
 
     @[id] = components
