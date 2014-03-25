@@ -20,11 +20,17 @@ class System.Rendering extends System
     @drawing.clear()
     for own id, descriptor of @engine.entities.withComponents(["Position", "Shape"])
       p = descriptor["Position"].position
+      shape = descriptor["Shape"].shape
+
+      @drawing.save()
+      @drawing.translate(p)
 
       @context.beginPath()
-      @context.arc(p[0], p[1], 3, 0, Math.PI * 2, false)
+      @context.arc(0, 0, shape.radius, 0, Math.PI * 2, false)
       @context.stroke()
       @context.closePath()
+
+      @drawing.restore()
 
     @_draw = null
 

@@ -31,5 +31,5 @@ class @EntityManager
     results
 
 @Entities = {
-  "Bullet": [Component.ID, Component.Position, Component.Renderable]
+  "Bullet": [Component.ID, Component.Position, Component.Shape]
 }
