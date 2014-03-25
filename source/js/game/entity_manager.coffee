@@ -2,7 +2,7 @@
 
 class @EntityManager
   constructor: ->
-    @ids = new IDPool
+    @ids = new ResourcePool
 
   create: (entityName) ->
     id = @ids.create()

@@ -1,5 +1,5 @@
-class @IDPool
-  constructor: (value) ->
+class @ResourcePool
+  constructor: ->
     @count = 0
     @active = new DoublyLinkedList
     @unused = new DoublyLinkedList
