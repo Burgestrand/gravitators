@@ -10,6 +10,10 @@ describe "EntityManager", ->
     b = manager.create(type)
     expect(a).not.to.equal(b)
 
+  it "throws an error when creating an unknown entity type"
+  it "re-uses previously existing IDs"
+  it "re-uses previously existing component infos"
+
   xit "can be iterated over (but does not guarantee order)", ->
     toArray = (manager) -> id for id in manager
     manager = new EntityManager
