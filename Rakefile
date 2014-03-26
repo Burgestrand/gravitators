@@ -3,4 +3,9 @@ task :server do
   exec "middleman server -p 5000"
 end
 
-task :default => :server
+desc "Run the test suite."
+task :spec do
+  exec "npm run-script test"
+end
+
+task :default => :spec
