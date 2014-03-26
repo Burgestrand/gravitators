@@ -17,10 +17,13 @@ class @Component
       child = ->
       child.prototype = constructor.prototype
       allocator = ->
-        obj = new child
-        constructor.apply(obj, arguments)
-        obj
-      resettor  = ->
+        new child
+      initializer = ->
         constructor.apply(this, arguments)
-      @_pool = new SimplePool(allocator, resettor)
+      deallocator = (obj) ->
+        obj.deallocate()
+      @_pool = new SimplePool(allocator, initializer, deallocator)
     @_pool
+
+  deallocate: ->
+    # no op
