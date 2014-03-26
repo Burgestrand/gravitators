@@ -1,6 +1,4 @@
 class Component.Position extends Component
-  constructor: ->
-    s = 640
-    x = Math.floor((Math.random() * s) - (s / 2))
-    y = Math.floor((Math.random() * s) - (s / 2))
-    @position = vec2.fromValues(x, y)
+  constructor: (x = 0, y = 0) ->
+    @position or= vec2.create()
+    vec2.set(@position, x, y)

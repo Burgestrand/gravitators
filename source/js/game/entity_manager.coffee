@@ -2,14 +2,17 @@
 
 class @EntityManager
   constructor: (@engine) ->
-    @ids = new ResourcePool
+    @count = 0
+    allocator = -> @count++
+    resettor  = ->
+    @ids = new EnumerablePool(allocator, resettor)
 
   create: (entityName) ->
     id = @ids.create()
 
     components = {}
     for component in Entities[entityName]
-      components[component.name] = new component(@engine, id)
+      components[component.name] = new component(id)
     Object.freeze(components)
 
     @[id] = components
