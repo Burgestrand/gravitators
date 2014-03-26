@@ -1,15 +1,18 @@
 class @SimplePool
-  constructor: (@allocator, @resettor) ->
+  NoOp = ->
+
+  constructor: (@allocator, @initializer = NoOp, @deallocator = NoOp) ->
     @length = 0
     @free = []
 
   create: ->
-    if @length
-      free = @free[--@length]
-      @resettor.apply(free, arguments)
-      free
+    free = if @length
+      @free[--@length]
     else
-      @allocator.apply(null, arguments)
+      @allocator()
+    @initializer.apply(free, arguments)
+    free
 
   release: (obj) ->
+    @deallocator(obj)
     @free[@length++] = obj
