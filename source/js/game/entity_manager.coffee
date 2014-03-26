@@ -9,12 +9,15 @@ class @EntityManager
 
   pool: (type) ->
     @pools[type] or= do ->
+      components = EntityManager[type]
+      unless components
+        throw new Error("unknown entity type: #{type}")
       allocator = -> {}
       initializer = (id) ->
-        for component in EntityManager[type]
+        for component in components
           @[component.name] = component.create(id)
       deallocator = (obj) ->
-        for component in EntityManager[type]
+        for component in components
           component.release(obj[component.name])
       new SimplePool(allocator, initializer, deallocator)
 
