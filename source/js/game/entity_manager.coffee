@@ -38,12 +38,10 @@ class @EntityManager
     @id2info[id]
 
   withComponents: (components) ->
-    id2info  = @id2info
-    results  = {}
-    searcher = (id) ->
-      info = id2info[id]
+    results = {}
+    for id in @ids
+      info = @id2info[id]
       for component in components
-        return unless component of info
+        continue unless component of info
       results[id] = info
-    @ids.forEach(searcher)
     results

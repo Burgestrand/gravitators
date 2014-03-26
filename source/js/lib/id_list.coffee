@@ -1,7 +1,6 @@
 class @IDList
   constructor: ->
-    @length = -1
-    @ids = []
+    @length = 0
     @id2index = {}
 
     list = this
@@ -10,16 +9,16 @@ class @IDList
       count++
     initializer = ->
       id = @valueOf()
-      list.length += 1
       list.id2index[id] = list.length
-      list.ids[list.length] = id
+      list[list.length] = id
+      list.length += 1
     deallocator = (id) ->
-      index = list.id2index[id]
-      swap = list.ids[list.length]
-      list.ids[list.length] = list.ids[index]
-      list.ids[index] = swap
-      list.id2index[swap] = index
       list.length -= 1
+      index = list.id2index[id]
+      swap = list[list.length]
+      list[list.length] = list[index]
+      list[index] = swap
+      list.id2index[swap] = index
 
     @pool = new SimplePool(allocator, initializer, deallocator)
 
@@ -28,7 +27,3 @@ class @IDList
 
   release: (id) ->
     @pool.release(id)
-
-  forEach: (fn) ->
-    for index in [0..@length] by 1
-      fn(@ids[index])
