@@ -1,37 +1,49 @@
 class @EntityManager
+  @Bullet: [Component.ID, Component.Position, Component.Shape]
+
   constructor: (@engine) ->
-    @count = 0
-    allocator = -> @count++
-    resettor  = ->
-    @ids = new EnumerablePool(allocator, resettor)
+    @ids = new IDList()
+    @id2info = this
+    @id2pool = {}
+    @pools = {}
 
-  create: (entityName) ->
+  pool: (type) ->
+    @pools[type] or= do ->
+      allocator = -> {}
+      initializer = (id) ->
+        for component in EntityManager[type]
+          @[component.name] = component.create(id)
+      deallocator = (obj) ->
+        for component in EntityManager[type]
+          component.release(obj[component.name])
+      new SimplePool(allocator, initializer, deallocator)
+
+  create: (type) ->
     id = @ids.create()
-
-    components = {}
-    for component in Entities[entityName]
-      components[component.name] = new component(id)
-    Object.freeze(components)
-
-    @[id] = components
+    pool = @pool(type)
+    @id2info[id] = pool.create()
+    @id2pool[id] = pool
     id
 
   destroy: (id) ->
-    unless @ids.release(id)
+    unless @id2components[id]
       throw new Error("entity #{id} does not exist")
-    @[id] = null
+    pool = @id2pool[id]
+    info = @id2info[id]
+    pool.release(info)
+    @id2pool[id] = null
+    @id2info[id] = null
 
-  withComponents: (componentNames) ->
-    self = @
-    results = {}
-    @ids.forEach (id) ->
-      components = self[id]
-      matches = true
-      for name in componentNames
-        matches = matches && (name of components)
-      results[id] = components if matches
+  find: (id) ->
+    @id2info[id]
+
+  withComponents: (components) ->
+    id2info  = @id2info
+    results  = {}
+    searcher = (id) ->
+      info = id2info[id]
+      for component in components
+        return unless component of info
+      results[id] = info
+    @ids.forEach(searcher)
     results
-
-@Entities = {
-  "Bullet": [Component.ID, Component.Position, Component.Shape]
-}
