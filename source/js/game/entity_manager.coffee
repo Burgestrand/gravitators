@@ -1,5 +1,3 @@
-#= require_self
-
 class @EntityManager
   constructor: (@engine) ->
     @count = 0
