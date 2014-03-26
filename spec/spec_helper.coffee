@@ -1,9 +1,13 @@
+fs = require "fs"
 vm = require "vm"
 Mincer = require "mincer"
 environment = new Mincer.Environment()
-environment.appendPath("./source/js")
-source = environment.findAsset("application.js")
-application = vm.createScript(source.toString())
+environment.appendPath("#{__dirname}/../source/js")
+source = environment.findAsset("application.js").toString()
+
+compiledSourcePath = "#{__dirname}/application.jsc"
+application = vm.createScript(source, compiledSourcePath)
+fs.writeFileSync(compiledSourcePath, source)
 
 chai = require "chai"
 chai.expect()

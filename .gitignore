@@ -19,4 +19,5 @@
 
 
 node_modules/
-spec/npm-debug.log
+npm-debug.log
+spec/application.jsc
