@@ -1,5 +1,3 @@
-require "../spec_helper"
-
 describe "SimplePool", ->
   it "re-uses previously created, and then released, objects", ->
     allocated = 0
@@ -59,7 +57,7 @@ describe "SimplePool", ->
     expect(b.b).to.equal("D")
     expect(a).to.equal(b)
 
-  it "deallocates on #release", ->
+  it "deallocates on #release()", ->
     allocator = -> {}
     initializer = ->
     deallocator = (obj) -> obj.deallocated = true
