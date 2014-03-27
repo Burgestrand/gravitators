@@ -24,7 +24,7 @@ class @EntityManager
   create: (type) ->
     id = @ids.create()
     pool = @pool(type)
-    @id2info[id] = pool.create()
+    @id2info[id] = pool.create(id)
     @id2pool[id] = pool
     id
 
