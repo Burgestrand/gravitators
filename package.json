@@ -10,7 +10,8 @@
     "mincer"        : "*",
     "coffee-script" : ">=1.7",
     "mocha"         : "*",
-    "chai"          : "*"
+    "chai"          : "*",
+    "source-map"    : "*"
   },
   "engines": {
     "node": ">=0.10.26"

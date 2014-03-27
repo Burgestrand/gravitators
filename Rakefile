@@ -5,7 +5,7 @@ end
 
 desc "Run the test suite."
 task :spec do
-  exec "npm run-script test"
+  exec "npm test"
 end
 
 task :default => :spec

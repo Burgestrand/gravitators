@@ -1,13 +1,25 @@
+sourcemap = require "source-map"
 fs = require "fs"
 vm = require "vm"
 Mincer = require "mincer"
 environment = new Mincer.Environment()
 environment.appendPath("#{__dirname}/../source/js")
-source = environment.findAsset("application.js").toString()
+environment.enable "source_maps"
+
+asset = environment.findAsset("application.js")
+source = asset.toString()
 
 compiledSourcePath = "#{__dirname}/application.jsc"
 application = vm.createScript(source, compiledSourcePath)
 fs.writeFileSync(compiledSourcePath, source)
+
+sourceMapRegexp = new RegExp("/([^/]+\.jsc):(\\d+):(\\d+)")
+sourceMaps = { "application.jsc": new sourcemap.SourceMapConsumer(asset.sourceMap) }
+Error.prepareStackTrace = (error, stack) ->
+  error + stack.map (frame) ->
+    "\n     at " + frame.toString().replace sourceMapRegexp, (match, file, line, column) ->
+      { source, line, column, name } = sourceMaps[file].originalPositionFor(line: parseInt(line), column: parseInt(column))
+      "#{match} [#{source}:#{line}:#{column}]"
 
 chai = require "chai"
 chai.expect()
