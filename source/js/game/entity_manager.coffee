@@ -1,15 +1,15 @@
 class @EntityManager
   @Bullet: [Component.ID, Component.Position, Component.Shape]
 
-  constructor: (@engine) ->
+  constructor: (@repository = EntityManager) ->
     @ids = new IDList()
     @id2info = this
     @id2pool = {}
     @pools = {}
 
   pool: (type) ->
-    @pools[type] or= do ->
-      components = EntityManager[type]
+    unless @pools[type]
+      components = @repository[type]
       unless components
         throw new Error("unknown entity type: #{type}")
       allocator = -> {}
@@ -19,7 +19,8 @@ class @EntityManager
       deallocator = (obj) ->
         for component in components
           component.release(obj[component.name])
-      new SimplePool(allocator, initializer, deallocator)
+      @pools[type] = new SimplePool(allocator, initializer, deallocator)
+    @pools[type]
 
   create: (type) ->
     id = @ids.create()
