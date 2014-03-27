@@ -1,2 +1,6 @@
 @Entities =
-  Bullet: [Components.ID, Components.Position, Components.Shape]
+  Bullet: [
+    Components.Position,
+    Components.Velocity,
+    Components.Shape
+  ]
