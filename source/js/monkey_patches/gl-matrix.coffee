@@ -5,3 +5,6 @@ vec2.polar = (angle, length) ->
 
 vec2.fromValue = (xy) ->
   vec2.fromValues(xy, xy)
+
+vec2.clear = (a) ->
+  vec2.set(a, 0, 0)
