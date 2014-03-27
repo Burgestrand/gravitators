@@ -7,3 +7,5 @@ class @System
   setup: (@engine) ->
 
   update: (delta) ->
+
+@Systems = {}

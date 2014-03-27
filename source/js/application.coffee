@@ -6,8 +6,9 @@
 
 document.addEventListener "DOMContentLoaded", =>
   engine = new Engine()
-  engine.register(new System.Movement, fps: 120)
-  renderer = engine.register(new System.Rendering(640, 640), fps: 60)
+  engine.register(new Systems.Movement, fps: 120)
+  engine.register(new Systems.Collisions, fps: 120)
+  renderer = engine.register(new Systems.Rendering(640, 640), fps: 60)
   renderer.appendTo(document.body)
 
   key "p", (event) ->

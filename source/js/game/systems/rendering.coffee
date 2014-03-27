@@ -1,4 +1,4 @@
-class System.Rendering extends System
+class Systems.Rendering extends System
   constructor: (@width, @height) ->
     @canvas = document.createElement("canvas")
     @canvas.width = @width

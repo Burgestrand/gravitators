@@ -1,4 +1,4 @@
-class System.Movement extends System
+class Systems.Movement extends System
   constructor: ->
 
   update: (delta) ->
