@@ -5,19 +5,34 @@
 #= require ./game/engine
 
 document.addEventListener "DOMContentLoaded", =>
-  @engine = new Engine()
-  @renderer = @engine.register(new System.Rendering(640, 640))
-  @renderer.appendTo(document.body)
-  @engine.start()
+  engine = new Engine()
+  engine.register(new System.Movement, fps: 120)
+  renderer = engine.register(new System.Rendering(640, 640), fps: 60)
+  renderer.appendTo(document.body)
 
-  count = 100
-  timer = setInterval ->
-    clearInterval(timer) if count-- <= 0
-    for index in [1..10]
-      @engine.entities.create "Bullet", (bullet) ->
-        radius = Math.round(Math.random() * 7 + 1)
-        bullet["Shape"].shape.radius = radius
+  key "p", (event) ->
+    event.preventDefault()
 
-        length = Math.round(Math.random() * 320)
-        vec2.random(bullet["Position"].position, length)
-  , 10
+    if engine.running
+      engine.stop()
+    else
+      engine.start()
+
+  unless document.hidden
+    engine.start()
+
+  playpause = ->
+    if document.hidden
+      console.log "Tab lost focus. Pausing."
+      engine.stop()
+
+  document.addEventListener "webkitvisibilitychange", playpause
+  document.addEventListener "mozvisibilitychange", playpause
+  document.addEventListener "msvisibilitychange", playpause
+
+  engine.entities.create "Bullet", (bullet) ->
+    bullet["Shape"].shape.radius = 5
+    vec2.set(bullet["Velocity"].velocity, 0, -10)
+
+  @engine = engine
+  @renderer = renderer
