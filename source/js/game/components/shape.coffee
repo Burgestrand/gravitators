@@ -2,5 +2,6 @@
 #= require_directory ./shapes
 
 class Components.Shape extends Component
-  constructor: (radius = 1) ->
-    @shape = new Components.Shape.Circle(radius)
+  constructor: ->
+    @shape or= new Components.Shape.Circle
+    @shape.radius = 1
