@@ -2,60 +2,62 @@ describe "EntityManager", ->
   type = "SomeType"
 
   beforeEach ->
+    count = 0
     class SomeComponent extends Component
-      constructor: (@id) ->
+      constructor: ->
+        @unique = count++
         @thisIsAComponent = true
     @repository = {}
     @repository[type] = [SomeComponent]
-    @manager = new EntityManager(@repository)
+    @entities = new EntityManager(@repository)
 
   describe "#create()", ->
     it "creates new entities when there are none to be reused", ->
-      a = @manager.create(type)
-      b = @manager.create(type)
+      a = @entities.create(type)
+      b = @entities.create(type)
       expect(a).not.to.equal(b)
 
     it "re-uses entities", ->
-      a = @manager.create(type)
-      @manager.release(a)
-      b = @manager.create(type)
+      a = @entities.create(type)
+      @entities.release(a)
+      b = @entities.create(type)
       expect(a).to.equal(b)
 
     it "throws an error when creating an unknown entity type", ->
-      expect(=> @manager.create()).to.throw(/unknown entity type/)
+      expect(=> @entities.create()).to.throw(/unknown entity type/)
 
     it "creates new components when there are none to be reused", ->
-      a = @manager.create(type)
-      ai = @manager[a]
-      b = @manager.create(type)
-      bi = @manager[b]
-      expect(ai["SomeComponent"].id).to.equal(a)
-      expect(bi["SomeComponent"].id).to.equal(b)
+      a = @entities.create(type)
+      ai = @entities[a]
+      b = @entities.create(type)
+      bi = @entities[b]
       expect(ai).not.to.equal(bi)
+      expect(ai["SomeComponent"]).to.be.ok
+      expect(bi["SomeComponent"]).to.be.ok
+      expect(ai["SomeComponent"]).not.to.equal(bi["SomeComponent"])
 
     it "re-uses components", ->
-      a = @manager.create(type)
-      ai = @manager[a]
-      expect(ai["SomeComponent"].id).to.equal(a)
-      expect(ai["SomeComponent"].thisIsAComponent).to.be.true
-      ai["SomeComponent"].thisIsAComponent = false
-      expect(ai["SomeComponent"].thisIsAComponent).to.be.false
+      a = @entities.create(type)
+      ai = @entities[a]
+      aic = ai["SomeComponent"]
+      expect(aic.thisIsAComponent).to.equal(true)
+      aic.thisIsAComponent = false
+      expect(aic.thisIsAComponent).to.equal(false)
 
-      @manager.release(a)
+      @entities.release(a)
 
-      b = @manager.create(type)
-      bi = @manager[b]
-      expect(bi["SomeComponent"].id).to.equal(b)
-      expect(bi["SomeComponent"].thisIsAComponent).to.be.true
+      b = @entities.create(type)
+      bi = @entities[b]
+      bic = bi["SomeComponent"]
+      expect(bic.thisIsAComponent).to.equal(true)
 
       expect(a).to.equal(b)
       expect(ai).to.equal(bi)
+      expect(aic).to.equal(bic)
 
     it "allows lookup of entities", ->
-      a = @manager.create(type)
-      ai = @manager[a]
-      expect(ai["SomeComponent"].id).to.equal(a)
-      expect(ai["SomeComponent"].thisIsAComponent).to.be.true
+      a = @entities.create(type)
+      expect(@entities[a]["SomeComponent"].thisIsAComponent).to.equal(true)
 
   describe "#withComponents", ->
     it "finds all entities containing all specified components"

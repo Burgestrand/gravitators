@@ -18,7 +18,7 @@ class System.Rendering extends System
 
   draw: =>
     @drawing.clear()
-    for own id, descriptor of @engine.entities.withComponents(["Position", "Shape"])
+    for own id, descriptor of @engine.entities.withComponents([Components.Position, Components.Shape])
       p = descriptor["Position"].position
       shape = descriptor["Shape"].shape
 

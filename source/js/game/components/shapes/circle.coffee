@@ -1,2 +1,2 @@
-class Component.Shape.Circle
+class Components.Shape.Circle
   constructor: (@radius) ->

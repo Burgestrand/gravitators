@@ -1,1 +1,1 @@
-class Component.ID extends Component
+class Components.ID extends Component

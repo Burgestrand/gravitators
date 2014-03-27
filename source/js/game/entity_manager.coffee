@@ -1,5 +1,5 @@
 class @EntityManager
-  @Bullet: [Component.ID, Component.Position, Component.Shape]
+  @Bullet: [Components.ID, Components.Position, Components.Shape]
 
   constructor: (@repository = EntityManager) ->
     @ids = new IDList()
@@ -13,9 +13,9 @@ class @EntityManager
       unless components
         throw new Error("unknown entity type: #{type}")
       allocator = -> {}
-      initializer = (id) ->
+      initializer = ->
         for component in components
-          @[component.name] = component.create(id)
+          @[component.name] = component.create()
       deallocator = (obj) ->
         for component in components
           component.release(obj[component.name])
@@ -25,7 +25,7 @@ class @EntityManager
   create: (type) ->
     id = @ids.create()
     pool = @pool(type)
-    @id2info[id] = pool.create(id)
+    @id2info[id] = pool.create()
     @id2pool[id] = pool
     id
 

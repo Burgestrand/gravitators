@@ -27,3 +27,5 @@ class @Component
 
   deallocate: ->
     # no op
+
+@Components = {}

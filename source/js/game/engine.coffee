@@ -5,7 +5,7 @@
 
 class @Engine
   constructor: ->
-    @entities = new EntityManager(this)
+    @entities = new EntityManager()
     @systems = {}
     @_systems = []
 
