@@ -1,6 +1,4 @@
 class @EntityManager
-  @Bullet: [Components.ID, Components.Position, Components.Shape]
-
   class IDList
     constructor: ->
       @length = 0

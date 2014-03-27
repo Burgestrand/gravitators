@@ -1,11 +1,12 @@
 #= require_self
 #= require ./component
+#= require ./entities
 #= require ./entity_manager
 #= require ./system
 
 class @Engine
   constructor: ->
-    @entities = new EntityManager()
+    @entities = new EntityManager(Entities)
     @systems = {}
     @_systems = []
 
