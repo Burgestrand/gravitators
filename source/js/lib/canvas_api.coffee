@@ -3,14 +3,21 @@ class @CanvasAPI
     @context = @canvas.getContext("2d")
     @context.font = "16px Helvetica Neue"
     @transforms = []
-    @currentTransform = mat2d.create()
+    allocator = ->
+      mat2d.create()
+    initializer = (matrix) ->
+      mat2d.identity(matrix)
+    @transformPool = new SimplePool(allocator, initializer)
+    @currentTransform = @transformPool.create()
 
   save: ->
-    @transforms.push(mat2d.clone(@currentTransform))
+    @transforms.push(@currentTransform)
+    @setTransform(mat2d.copy(@transformPool.create(), @currentTransform))
     @context.save()
 
   restore: ->
     @context.restore()
+    @transformPool.release(@currentTransform)
     @currentTransform = @transforms.pop()
 
   translate: (v) ->
@@ -19,6 +26,10 @@ class @CanvasAPI
 
   scale: (v) ->
     mat2d.scale(@currentTransform, @currentTransform, v)
+    @setTransform(@currentTransform)
+
+  rotate: (r) ->
+    mat2d.rotate(@currentTransform, @currentTransform, r)
     @setTransform(@currentTransform)
 
   setTransform: (m) ->
