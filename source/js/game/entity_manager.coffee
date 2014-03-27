@@ -1,4 +1,6 @@
 class @EntityManager
+  NoOp = ->
+
   class IDList
     constructor: ->
       @length = 0
@@ -46,11 +48,13 @@ class @EntityManager
       @pools[type] = new SimplePool(allocator, initializer, deallocator)
     @pools[type]
 
-  create: (type) ->
+  create: (type, fn = NoOp) ->
     id = @ids.create()
     pool = @pool(type)
-    @id2info[id] = pool.create()
+    info = pool.create()
+    @id2info[id] = info
     @id2pool[id] = pool
+    fn(info)
     id
 
   release: (id) ->

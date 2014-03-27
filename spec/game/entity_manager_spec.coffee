@@ -2,16 +2,22 @@ describe "EntityManager", ->
   type = "SomeType"
 
   beforeEach ->
-    count = 0
     class SomeComponent extends Component
       constructor: ->
-        @unique = count++
         @thisIsAComponent = true
     @repository = {}
     @repository[type] = [SomeComponent]
     @entities = new EntityManager(@repository)
 
   describe "#create()", ->
+    it "initializes the new entity with the passed-in function", ->
+      a = @entities.create type, (info) ->
+        info["SomeComponent"].someValue = true
+      b = @entities.create(type, (info) ->)
+
+      expect(@entities[a]["SomeComponent"].someValue).to.equal(true)
+      expect(@entities[b]["SomeComponent"]).not.to.have.key("someValue")
+
     it "creates new entities when there are none to be reused", ->
       a = @entities.create(type)
       b = @entities.create(type)
