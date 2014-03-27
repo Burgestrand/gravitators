@@ -15,11 +15,11 @@ fs.writeFileSync(compiledSourcePath, source)
 
 sourceMapRegexp = new RegExp("/([^/]+\.jsc):(\\d+):(\\d+)")
 sourceMaps = { "application.jsc": new sourcemap.SourceMapConsumer(asset.sourceMap) }
+prepareStackTrace = Error.prepareStackTrace
 Error.prepareStackTrace = (error, stack) ->
-  error + stack.map (frame) ->
-    "\n     at " + frame.toString().replace sourceMapRegexp, (match, file, line, column) ->
-      { source, line, column, name } = sourceMaps[file].originalPositionFor(line: parseInt(line), column: parseInt(column))
-      "#{match} [#{source}:#{line}:#{column}]"
+  prepareStackTrace(error, stack).replace sourceMapRegexp, (match, file, line, column) ->
+    { source, line, column, name } = sourceMaps[file].originalPositionFor(line: parseInt(line), column: parseInt(column))
+    "#{match} [#{source}:#{line}:#{column}]"
 
 chai = require "chai"
 chai.expect()

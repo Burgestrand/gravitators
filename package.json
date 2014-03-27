@@ -4,14 +4,15 @@
   "description": "N/A",
   "repository": "N/A",
   "scripts": {
-    "test": "node_modules/.bin/mocha --compilers coffee:coffee-script/register --recursive spec/"
+    "test": "node_modules/.bin/mocha --compilers coffee:coffee-script/register --require coffee-errors --recursive spec/"
   },
   "dependencies" : {
     "mincer"        : "*",
     "coffee-script" : ">=1.7",
     "mocha"         : "*",
     "chai"          : "*",
-    "source-map"    : "*"
+    "source-map"    : "*",
+    "coffee-errors" : "*"
   },
   "engines": {
     "node": ">=0.10.26"
