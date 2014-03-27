@@ -1,4 +1,6 @@
 class @EntityManager
+  @Bullet: [Components.ID, Components.Position, Components.Shape]
+
   class IDList
     constructor: ->
       @length = 0
@@ -24,8 +26,6 @@ class @EntityManager
 
     release: (id) ->
       @pool.release(id)
-
-  @Bullet: [Components.ID, Components.Position, Components.Shape]
 
   constructor: (@repository = EntityManager) ->
     @id2info = this
