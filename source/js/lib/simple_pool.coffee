@@ -10,7 +10,7 @@ class @SimplePool
       @free[--@length]
     else
       @allocator()
-    @initializer.apply(free, arguments)
+    @initializer(free, arguments)
     free
 
   release: (obj) ->

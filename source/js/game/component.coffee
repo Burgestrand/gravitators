@@ -18,8 +18,8 @@ class @Component
       child.prototype = constructor.prototype
       allocator = ->
         new child
-      initializer = ->
-        constructor.apply(this, arguments)
+      initializer = (obj, args) ->
+        constructor.apply(obj, args)
       deallocator = (obj) ->
         obj.deallocate()
       @_pool = new SimplePool(allocator, initializer, deallocator)

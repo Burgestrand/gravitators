@@ -19,8 +19,8 @@ describe "SimplePool", ->
   it "initializes newly allocated objects", ->
     allocator = ->
       {}
-    initializer = ->
-      @initialized = true
+    initializer = (obj) ->
+      obj.initialized = true
     pool = new SimplePool(allocator, initializer)
 
     a = pool.create()
@@ -30,8 +30,8 @@ describe "SimplePool", ->
     allocator = ->
       {}
     initialized = 0
-    initializer = ->
-      @initialized = initialized++
+    initializer = (obj) ->
+      obj.initialized = initialized++
     pool = new SimplePool(allocator, initializer)
 
     a = pool.create()
@@ -44,7 +44,9 @@ describe "SimplePool", ->
 
   it "passes given arguments to the initializer", ->
     allocator = -> {}
-    initializer = (@a, @b) ->
+    initializer = (obj, [a, b]) ->
+      obj.a = a
+      obj.b = b
     pool = new SimplePool(allocator, initializer)
 
     a = pool.create("A", "B")

@@ -1,11 +1,37 @@
 class @EntityManager
+  class IDList
+    constructor: ->
+      @length = 0
+      id2index = {}
+      count = 0
+      allocator = ->
+        "#{count++}"
+      initializer = (id) =>
+        id2index[id] = @length
+        @[@length] = id
+        @length += 1
+      deallocator = (id) =>
+        @length -= 1
+        index = id2index[id]
+        swap = @[@length]
+        @[@length] = @[index]
+        @[index] = swap
+        id2index[swap] = index
+      @pool = new SimplePool(allocator, initializer, deallocator)
+
+    create: ->
+      @pool.create()
+
+    release: (id) ->
+      @pool.release(id)
+
   @Bullet: [Components.ID, Components.Position, Components.Shape]
 
   constructor: (@repository = EntityManager) ->
-    @ids = new IDList()
     @id2info = this
     @id2pool = {}
     @pools = {}
+    @ids = new IDList()
 
   pool: (type) ->
     unless @pools[type]
@@ -13,9 +39,9 @@ class @EntityManager
       unless components
         throw new Error("unknown entity type: #{type}")
       allocator = -> {}
-      initializer = ->
+      initializer = (obj) ->
         for component in components
-          @[component.name] = component.create()
+          obj[component.name] = component.create()
       deallocator = (obj) ->
         for component in components
           component.release(obj[component.name])
