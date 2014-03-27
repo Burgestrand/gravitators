@@ -46,7 +46,10 @@ class @EntityManager
     results = {}
     for id in @ids
       info = @id2info[id]
+      broke = false
       for component in components
-        continue unless component of info
-      results[id] = info
+        unless component.name of info
+          broke = true
+          break
+      results[id] = info unless broke
     results

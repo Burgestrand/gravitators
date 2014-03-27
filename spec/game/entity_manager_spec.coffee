@@ -60,7 +60,26 @@ describe "EntityManager", ->
       expect(@entities[a]["SomeComponent"].thisIsAComponent).to.equal(true)
 
   describe "#withComponents", ->
-    it "finds all entities containing all specified components"
+    it "finds all entities containing all specified components", ->
+      class SoComponent extends Component
+      class SuchComponent extends Component
+      class AmazeComponent extends Component
+
+      @repository["A"] = [SoComponent]
+      @repository["B"] = [SoComponent, SuchComponent]
+      @repository["C"] = [SoComponent, SuchComponent, AmazeComponent]
+      @repository["D"] = [SuchComponent, AmazeComponent]
+      @repository["E"] = [AmazeComponent]
+
+      a = @entities.create("A")
+      b = @entities.create("B")
+      c = @entities.create("C")
+      d = @entities.create("D")
+      e = @entities.create("E")
+
+      expect(@entities.withComponents([SoComponent, SuchComponent])).to.have.keys(b.toString(), c.toString())
+      expect(@entities.withComponents([SoComponent])).to.have.keys(a.toString(), b.toString(), c.toString())
+      expect(@entities.withComponents([SoComponent, SuchComponent, AmazeComponent])).to.have.keys(c.toString())
 
   xit "can be iterated over (but does not guarantee order)", ->
     toArray = (@manager) -> id for id in @manager
