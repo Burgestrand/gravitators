@@ -6,7 +6,7 @@ class @IDList
     list = this
     count = 0
     allocator = ->
-      count++
+      "#{count++}"
     initializer = ->
       id = @valueOf()
       list.id2index[id] = list.length
