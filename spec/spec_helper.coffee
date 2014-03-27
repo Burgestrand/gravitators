@@ -13,7 +13,7 @@ compiledSourcePath = "#{__dirname}/application.jsc"
 application = vm.createScript(source, compiledSourcePath)
 fs.writeFileSync(compiledSourcePath, source)
 
-sourceMapRegexp = new RegExp("/([^/]+\.jsc):(\\d+):(\\d+)")
+sourceMapRegexp = new RegExp("/([^/]+\.jsc):(\\d+):(\\d+)", "g")
 sourceMaps = { "application.jsc": new sourcemap.SourceMapConsumer(asset.sourceMap) }
 prepareStackTrace = Error.prepareStackTrace
 Error.prepareStackTrace = (error, stack) ->
