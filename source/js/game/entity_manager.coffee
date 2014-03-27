@@ -28,9 +28,10 @@ class @EntityManager
     @id2pool[id] = pool
     id
 
-  destroy: (id) ->
-    unless @id2components[id]
+  release: (id) ->
+    unless @id2info[id]
       throw new Error("entity #{id} does not exist")
+    @ids.release(id)
     pool = @id2pool[id]
     info = @id2info[id]
     pool.release(info)
