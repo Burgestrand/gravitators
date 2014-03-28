@@ -1,5 +1,5 @@
 #= require_self
-#= require ./component
+#= require ./components
 #= require ./entities
 #= require ./entity_manager
 #= require ./system

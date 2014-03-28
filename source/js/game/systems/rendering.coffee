@@ -19,9 +19,9 @@ class Systems.Rendering extends System
   draw: =>
     @drawing.clear()
 
-    for id, info of @engine.entities.withComponents([Components.Position, Components.Shape])
-      { position } = info["Position"]
-      { radius } = info["Shape"].shape
+    for id, info of @engine.entities.withComponents("position", "shape")
+      { position, shape } = info
+      radius = shape.radius
 
       @drawing.save()
       @drawing.translate(position)

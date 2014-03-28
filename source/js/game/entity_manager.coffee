@@ -27,56 +27,52 @@ class @EntityManager
     release: (id) ->
       @pool.release(id)
 
+  class ComponentContainer
+    constructor: (@_template) ->
+      for key, component of @_template
+        @[key] = component.create()
+
+    deallocate: ->
+      for key, component in @_template
+        component.release(@[key])
+
   constructor: (@repository = EntityManager) ->
     @id2info = this
-    @id2pool = {}
-    @pools = {}
     @ids = new IDList()
 
-  pool: (type) ->
-    unless @pools[type]
-      components = @repository[type]
-      unless components
-        throw new Error("unknown entity type: #{type}")
-      allocator = -> {}
-      initializer = (obj) ->
-        for component in components
-          obj[component.name] = component.create()
-      deallocator = (obj) ->
-        for component in components
-          component.release(obj[component.name])
-      @pools[type] = new SimplePool(allocator, initializer, deallocator)
-    @pools[type]
+    allocator = ->
+      {}
+    initializer = (container, [id, @_template]) =>
+      for key, component of @_template
+        container[key] = component.create()
+    deallocator = (container) ->
+      for key, component of @_template
+        component.release(container[key])
+    @info = new SimplePool(allocator, initializer, deallocator)
 
-  create: (type, fn = NoOp) ->
+  create: (typeName, fn = NoOp) ->
     id = @ids.create()
-    pool = @pool(type)
-    info = pool.create()
+    info = @info.create(id, @repository[typeName])
     @id2info[id] = info
-    @id2pool[id] = pool
-    fn(info)
+    fn(id, info)
     id
 
   release: (id) ->
     unless @id2info[id]
       throw new Error("entity #{id} does not exist")
     @ids.release(id)
-    pool = @id2pool[id]
-    info = @id2info[id]
-    pool.release(info)
-    @id2pool[id] = null
-    @id2info[id] = null
+    @info.release(@id2info[id])
 
   find: (id) ->
     @id2info[id]
 
-  withComponents: (components) ->
+  withComponents: ->
     results = {}
     for id in @ids
       info = @id2info[id]
       broke = false
-      for component in components
-        unless component.name of info
+      for component in arguments
+        unless component of info
           broke = true
           break
       results[id] = info unless broke

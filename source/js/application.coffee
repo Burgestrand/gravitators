@@ -31,9 +31,8 @@ document.addEventListener "DOMContentLoaded", =>
   document.addEventListener "mozvisibilitychange", playpause
   document.addEventListener "msvisibilitychange", playpause
 
-  engine.entities.create "Bullet", (bullet) ->
-    bullet["Shape"].shape.radius = 5
-    vec2.set(bullet["Velocity"].velocity, 0, -10)
+  engine.entities.create "Bullet", (id, info) ->
+    info["shape"].radius = 5
+    vec2.set(info["velocity"], 0, -10)
 
   @engine = engine
-  @renderer = renderer
