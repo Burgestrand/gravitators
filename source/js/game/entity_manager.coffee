@@ -42,7 +42,7 @@ class @EntityManager
 
     allocator = ->
       {}
-    initializer = (container, [id, @_template]) =>
+    initializer = (container, [@_template]) =>
       for key, component of @_template
         container[key] = component.create()
     deallocator = (container) ->
@@ -52,7 +52,7 @@ class @EntityManager
 
   create: (typeName, fn = NoOp) ->
     id = @ids.create()
-    info = @info.create(id, @repository[typeName])
+    info = @info.create(@repository[typeName])
     @id2info[id] = info
     fn(id, info)
     id
