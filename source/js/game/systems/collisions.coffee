@@ -11,4 +11,3 @@ class Systems.Collisions extends System
 
       if (x + radius) > (width / 2) || (x - radius) < -(width / 2) || (y + radius) > (height / 2) || (y - radius) < -(height / 2)
         @engine.entities.release(id)
-        console.log "Crash!"
