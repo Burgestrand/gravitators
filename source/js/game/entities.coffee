@@ -1,6 +1,5 @@
 @Entities =
   Bullet:
-    position: Components.Vector,
-    velocity: Components.Vector,
-    force:    Components.Vector,
+    position: Components.Vector
+    velocity: Components.Vector
     shape:    Components.Circle
