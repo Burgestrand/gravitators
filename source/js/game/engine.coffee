@@ -10,8 +10,7 @@ class @Engine
     @systems = {}
     @_systems = []
 
-  register: (system, options = {}) ->
-    name = system.constructor.name
+  register: (name, system, options = {}) ->
     descriptor =
       name: name
       system: system

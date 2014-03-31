@@ -1,6 +1,6 @@
 class Systems.Collisions extends System
   update: ->
-    { width, height } = @engine.systems["Rendering"]
+    { width, height } = @engine.systems["rendering"]
 
     for id, info of @engine.entities.withComponents("position", "velocity", "shape")
       { position, shape } = info

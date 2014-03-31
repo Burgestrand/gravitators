@@ -6,10 +6,10 @@
 
 document.addEventListener "DOMContentLoaded", =>
   engine = new Engine()
-  engine.register(new Systems.Movement, fps: 120)
-  engine.register(new Systems.Collisions, fps: 120)
-  renderer = engine.register(new Systems.Rendering(640, 640), fps: 60)
-  renderer.appendTo(document.body)
+  engine.register("movement", new Systems.Movement, fps: 120)
+  engine.register("collisions", new Systems.Collisions, fps: 120)
+  engine.register("rendering", new Systems.Rendering(640, 640), fps: 60)
+  engine.systems["rendering"].appendTo(document.body)
 
   key "p", (event) ->
     event.preventDefault()
