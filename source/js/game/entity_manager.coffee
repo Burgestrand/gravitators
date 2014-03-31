@@ -27,30 +27,24 @@ class @EntityManager
     release: (id) ->
       @pool.release(id)
 
-  class ComponentContainer
-    constructor: (@_template) ->
-      for key, component of @_template
-        @[key] = component.create()
-
-    deallocate: ->
-      for key, component in @_template
-        component.release(@[key])
-
   constructor: (@repository = EntityManager) ->
     @id2info = this
     @ids = new IDList()
 
     allocator = ->
       {}
-    initializer = (container, [@_template]) =>
-      for key, component of @_template
+    initializer = (container, [template]) =>
+      container._template = template
+      for key, component of template
         container[key] = component.create()
     deallocator = (container) ->
-      for key, component of @_template
+      for key, component of container._template
         component.release(container[key])
     @info = new SimplePool(allocator, initializer, deallocator)
 
   create: (typeName, fn = NoOp) ->
+    unless @repository[typeName]
+      throw new Error("unknown entity type: #{typeName}")
     id = @ids.create()
     info = @info.create(@repository[typeName])
     @id2info[id] = info
@@ -62,6 +56,7 @@ class @EntityManager
       throw new Error("entity #{id} does not exist")
     @ids.release(id)
     @info.release(@id2info[id])
+    @id2info[id] = null
 
   find: (id) ->
     @id2info[id]

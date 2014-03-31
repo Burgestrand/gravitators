@@ -2,21 +2,22 @@ describe "EntityManager", ->
   type = "SomeType"
 
   beforeEach ->
-    class SomeComponent extends Component
-      constructor: ->
-        @thisIsAComponent = true
     @repository = {}
-    @repository[type] = [SomeComponent]
+    @repository[type] = {}
     @entities = new EntityManager(@repository)
 
   describe "#create()", ->
     it "initializes the new entity with the passed-in function", ->
-      a = @entities.create type, (info) ->
-        info["SomeComponent"].someValue = true
-      b = @entities.create(type, (info) ->)
+      pool =
+        create: -> { someValue: 1 }
+      @repository[type] = { SomeComponent: pool }
 
-      expect(@entities[a]["SomeComponent"].someValue).to.equal(true)
-      expect(@entities[b]["SomeComponent"]).not.to.have.key("someValue")
+      a = @entities.create type, (id, info) ->
+        info["SomeComponent"].someValue += 1
+      b = @entities.create(type, (id, info) ->)
+
+      expect(@entities[a]["SomeComponent"].someValue).to.equal(2)
+      expect(@entities[b]["SomeComponent"].someValue).to.equal(1)
 
     it "creates new entities when there are none to be reused", ->
       a = @entities.create(type)
@@ -32,50 +33,57 @@ describe "EntityManager", ->
     it "throws an error when creating an unknown entity type", ->
       expect(=> @entities.create()).to.throw(/unknown entity type/)
 
-    it "creates new components when there are none to be reused", ->
-      a = @entities.create(type)
-      ai = @entities[a]
-      b = @entities.create(type)
-      bi = @entities[b]
-      expect(ai).not.to.equal(bi)
-      expect(ai["SomeComponent"]).to.be.ok
-      expect(bi["SomeComponent"]).to.be.ok
-      expect(ai["SomeComponent"]).not.to.equal(bi["SomeComponent"])
+    it "creates components on entity creation", ->
+      pool =
+        create: (->)
+      @repository[type] = { position: pool }
 
-    it "re-uses components", ->
+      mock = sinon.mock(pool)
+      mock.expects("create").twice().withExactArgs().on(pool)
+
       a = @entities.create(type)
-      ai = @entities[a]
-      aic = ai["SomeComponent"]
-      expect(aic.thisIsAComponent).to.equal(true)
-      aic.thisIsAComponent = false
-      expect(aic.thisIsAComponent).to.equal(false)
+      b = @entities.create(type)
+
+      mock.verify()
+
+    it "releases components on entity release", ->
+      objA = { A: "" }
+      objB = { B: "" }
+      objs = [objB, objA]
+      pool = create: (-> objs.pop()), release: (->)
+      @repository[type] = { position: pool }
+
+      a = @entities.create(type)
+      b = @entities.create(type)
+      mock = sinon.mock(pool)
+      mockA = mock.expects("release").withExactArgs(objA).on(pool)
+      mockB = mock.expects("release").withExactArgs(objB).on(pool)
 
       @entities.release(a)
+      @entities.release(b)
 
-      b = @entities.create(type)
-      bi = @entities[b]
-      bic = bi["SomeComponent"]
-      expect(bic.thisIsAComponent).to.equal(true)
-
-      expect(a).to.equal(b)
-      expect(ai).to.equal(bi)
-      expect(aic).to.equal(bic)
+      mock.verify()
+      sinon.assert.callOrder(mockA, mockB)
 
     it "allows lookup of entities", ->
+      position = {}
+      pool = create: (-> position), release: (->)
+      @repository[type] = { position: pool }
+
       a = @entities.create(type)
-      expect(@entities[a]["SomeComponent"].thisIsAComponent).to.equal(true)
+      expect(@entities[a].position).to.equal(position)
+      @entities.release(a)
+      expect(@entities[a]).to.equal(null)
 
   describe "#withComponents", ->
     it "finds all entities containing all specified components", ->
-      class SoComponent extends Component
-      class SuchComponent extends Component
-      class AmazeComponent extends Component
+      pool = create: ->
 
-      @repository["A"] = [SoComponent]
-      @repository["B"] = [SoComponent, SuchComponent]
-      @repository["C"] = [SoComponent, SuchComponent, AmazeComponent]
-      @repository["D"] = [SuchComponent, AmazeComponent]
-      @repository["E"] = [AmazeComponent]
+      @repository["A"] = { SoComponent: pool }
+      @repository["B"] = { SoComponent: pool, SuchComponent: pool }
+      @repository["C"] = { SoComponent: pool, SuchComponent: pool, AmazeComponent: pool }
+      @repository["D"] = { SuchComponent: pool, AmazeComponent: pool }
+      @repository["E"] = { AmazeComponent: pool }
 
       a = @entities.create("A")
       b = @entities.create("B")
@@ -83,6 +91,6 @@ describe "EntityManager", ->
       d = @entities.create("D")
       e = @entities.create("E")
 
-      expect(@entities.withComponents([SoComponent, SuchComponent])).to.have.keys(b.toString(), c.toString())
-      expect(@entities.withComponents([SoComponent])).to.have.keys(a.toString(), b.toString(), c.toString())
-      expect(@entities.withComponents([SoComponent, SuchComponent, AmazeComponent])).to.have.keys(c.toString())
+      expect(@entities.withComponents("SoComponent", "SuchComponent")).to.have.keys(b.toString(), c.toString())
+      expect(@entities.withComponents("SoComponent")).to.have.keys(a.toString(), b.toString(), c.toString())
+      expect(@entities.withComponents("SoComponent", "SuchComponent", "AmazeComponent")).to.have.keys(c.toString())

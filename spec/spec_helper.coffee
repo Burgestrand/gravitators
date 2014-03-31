@@ -1,3 +1,4 @@
+sinon = require "sinon"
 sourcemap = require "source-map"
 fs = require "fs"
 vm = require "vm"
@@ -25,6 +26,7 @@ chai = require "chai"
 chai.expect()
 
 beforeEach ->
+  root.sinon = sinon
   root.expect = chai.expect
   root.window = root
   root.document = { addEventListener: -> }

@@ -11,6 +11,7 @@
     "coffee-script" : ">=1.7",
     "mocha"         : "*",
     "chai"          : "*",
+    "sinon"         : "*",
     "source-map"    : "*",
     "coffee-errors" : "*"
   },
