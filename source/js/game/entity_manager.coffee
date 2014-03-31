@@ -48,7 +48,7 @@ class @EntityManager
     id = @ids.create()
     info = @info.create(@repository[typeName])
     @id2info[id] = info
-    fn(id, info)
+    fn(info)
     id
 
   release: (id) ->

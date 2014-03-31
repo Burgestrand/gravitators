@@ -31,12 +31,6 @@ document.addEventListener "DOMContentLoaded", =>
   document.addEventListener "mozvisibilitychange", playpause
   document.addEventListener "msvisibilitychange", playpause
 
-  creator = ->
-    engine.entities.create "Bullet", (id, info) ->
-      info["shape"].radius = 5
-      vec2.set(info["velocity"], 0, -10)
-      vec2.set(info["position"], (Math.random() * 640) - 320, Math.random() * 320)
 
-  setInterval(creator, 100)
 
   @engine = engine

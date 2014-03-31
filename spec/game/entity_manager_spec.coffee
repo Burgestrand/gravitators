@@ -12,9 +12,9 @@ describe "EntityManager", ->
         create: -> { someValue: 1 }
       @repository[type] = { SomeComponent: pool }
 
-      a = @entities.create type, (id, info) ->
+      a = @entities.create type, (info) ->
         info["SomeComponent"].someValue += 1
-      b = @entities.create(type, (id, info) ->)
+      b = @entities.create(type, (info) ->)
 
       expect(@entities[a]["SomeComponent"].someValue).to.equal(2)
       expect(@entities[b]["SomeComponent"].someValue).to.equal(1)
