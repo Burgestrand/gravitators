@@ -77,13 +77,11 @@ describe "EntityManager", ->
 
   describe "#withComponents", ->
     it "finds all entities containing all specified components", ->
-      pool = create: ->
-
-      @repository["A"] = { SoComponent: pool }
-      @repository["B"] = { SoComponent: pool, SuchComponent: pool }
-      @repository["C"] = { SoComponent: pool, SuchComponent: pool, AmazeComponent: pool }
-      @repository["D"] = { SuchComponent: pool, AmazeComponent: pool }
-      @repository["E"] = { AmazeComponent: pool }
+      @repository["A"] = { SoComponent: true }
+      @repository["B"] = { SoComponent: true, SuchComponent: true }
+      @repository["C"] = { SoComponent: true, SuchComponent: true, AmazeComponent: true }
+      @repository["D"] = { SuchComponent: true, AmazeComponent: true }
+      @repository["E"] = { AmazeComponent: true }
 
       a = @entities.create("A")
       b = @entities.create("B")
@@ -94,3 +92,15 @@ describe "EntityManager", ->
       expect(@entities.withComponents("SoComponent", "SuchComponent")).to.have.keys(b.toString(), c.toString())
       expect(@entities.withComponents("SoComponent")).to.have.keys(a.toString(), b.toString(), c.toString())
       expect(@entities.withComponents("SoComponent", "SuchComponent", "AmazeComponent")).to.have.keys(c.toString())
+
+    it "does not find entities with re-used component infos", ->
+      @repository["such"] = { such: true }
+      @repository["wow"] = { wow: true }
+
+      a = @entities.create("such")
+      @entities.release(a)
+      b = @entities.create("wow")
+      expect(@entities[a]).to.equal(@entities[b])
+
+      expect(@entities.withComponents("such")).to.be.empty
+      expect(@entities.withComponents("wow")).to.have.keys(b.toString())

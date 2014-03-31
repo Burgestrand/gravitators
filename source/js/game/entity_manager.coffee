@@ -36,10 +36,15 @@ class @EntityManager
     initializer = (container, [template]) =>
       container._template = template
       for key, component of template
-        container[key] = component.create()
+        value = if component.create
+          component.create()
+        else
+          true
+        container[key] = value
     deallocator = (container) ->
       for key, component of container._template
-        component.release(container[key])
+        component.release(container[key]) if component.release
+        container[key] = undefined
     @info = new SimplePool(allocator, initializer, deallocator)
 
   create: (typeName, fn = NoOp) ->
@@ -67,7 +72,7 @@ class @EntityManager
       info = @id2info[id]
       broke = false
       for component in arguments
-        unless component of info
+        if info[component] is undefined
           broke = true
           break
       results[id] = info unless broke
