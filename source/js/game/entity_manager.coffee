@@ -39,7 +39,7 @@ class @EntityManager
         value = if component.create
           component.create()
         else
-          true
+          component
         container[key] = value
     deallocator = (container) ->
       for key, component of container._template
@@ -62,9 +62,6 @@ class @EntityManager
     @ids.release(id)
     @info.release(@id2info[id])
     @id2info[id] = null
-
-  find: (id) ->
-    @id2info[id]
 
   withComponents: ->
     results = {}
