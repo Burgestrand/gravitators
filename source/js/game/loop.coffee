@@ -4,13 +4,13 @@ class @Loop
 
   start: (fps = @fps) ->
     @fps = fps
-    diff = 0
+    delta = 0
     previous = performance.now()
     update = =>
       now = performance.now()
-      diff = now - previous
+      delta = now - previous
       previous = now
-      @update(diff)
+      @update(delta)
     @running = setInterval(update, 1000 / fps)
 
   stop: ->
