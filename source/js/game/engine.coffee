@@ -3,12 +3,14 @@
 #= require ./entities
 #= require ./entity_manager
 #= require ./system
+#= require ./loop
 
 class @Engine
   constructor: ->
     @entities = new EntityManager(Entities)
     @systems = {}
     @_systems = []
+    @loop = new Loop(@update)
 
   register: (name, system, options = {}) ->
     descriptor =
@@ -25,32 +27,24 @@ class @Engine
     system.setup(this)
     system
 
-  update: (delta) ->
-
-  start: (maxFPS = 120) ->
-    diff = 0
-    previous = performance.now()
-    update = =>
-      now = performance.now()
-      diff = now - previous
-      previous = now
-
-      for descriptor in @_systems
-        if descriptor.fps
-          descriptor.lag += diff
-
-          if descriptor.lag > descriptor.maximumLag
-            console.error "#{descriptor.name} is lagging!"
-            descriptor.lag = descriptor.maximumLag
-
-          while descriptor.lag >= descriptor.timestep
-            descriptor.system.update(descriptor.timestep, this)
-            descriptor.lag -= descriptor.timestep
-        else
-          descriptor.system.update(diff, this)
-
-    @running = setInterval(update, 1000 / maxFPS)
+  start: ->
+    @loop.start()
+    @running = true
 
   stop: ->
-    clearInterval(@running)
-    @running = false
+    @loop.stop()
+
+  update: (diff) =>
+    for descriptor in @_systems
+      if descriptor.fps
+        descriptor.lag += diff
+
+        if descriptor.lag > descriptor.maximumLag
+          console.error "#{descriptor.name} is lagging!"
+          descriptor.lag = descriptor.maximumLag
+
+        while descriptor.lag >= descriptor.timestep
+          descriptor.system.update(descriptor.timestep, this)
+          descriptor.lag -= descriptor.timestep
+      else
+        descriptor.system.update(diff, this)
