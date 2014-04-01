@@ -10,4 +10,3 @@
     rotation: Components.Number
     rotationSpeed: Components.Number
     model:    Components.Polygon
-    player:   Components.Player
