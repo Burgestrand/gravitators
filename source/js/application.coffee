@@ -31,6 +31,10 @@ document.addEventListener "DOMContentLoaded", =>
   document.addEventListener "mozvisibilitychange", playpause
   document.addEventListener "msvisibilitychange", playpause
 
-
+  engine.entities.create "Player", (info) ->
+    info["player"].id = "A"
+    info["model"].color = "red"
+    info["rotationSpeed"] = Math.PI
+    vec2.set(info["position"], (Math.random() * 640) - 320, Math.random() * 320)
 
   @engine = engine

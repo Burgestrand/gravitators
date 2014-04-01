@@ -2,4 +2,12 @@
   Bullet:
     position: Components.Vector
     velocity: Components.Vector
-    shape:    Components.Circle
+    model:    Components.Circle
+  Player:
+    position: Components.Vector
+    velocity: Components.Vector
+    impulse:  Components.Vector
+    rotation: Components.Number
+    rotationSpeed: Components.Number
+    model:    Components.Polygon
+    player:   Components.Player
