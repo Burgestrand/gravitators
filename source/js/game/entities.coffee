@@ -1,12 +1,13 @@
 @Entities =
-  Bullet:
-    position: Components.Vector
-    velocity: Components.Vector
-    model:    Components.Circle
-  Player:
-    position: Components.Vector
-    velocity: Components.Vector
-    impulse:  Components.Vector
-    rotation: Components.Number
-    rotationSpeed: Components.Number
-    model:    Components.Polygon
+  Player: (entity) ->
+    entity.addComponent("position", Components.Vector)
+    entity.addComponent("velocity", Components.Vector)
+    entity.addComponent("impulse",  Components.Vector)
+    entity.addComponent("rotation", Components.Number)
+    entity.addComponent("rotationSpeed", Components.Number)
+    entity.addComponent("model",    Components.Polygon)
+
+  Bullet: (entity) ->
+    entity.addComponent("position", Components.Vector)
+    entity.addComponent("velocity", Components.Vector)
+    entity.addComponent("model",    Components.Circle)

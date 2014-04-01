@@ -1,76 +1,51 @@
+#= require_self
+#= require_directory ./entity_manager
+
 class @EntityManager
   NoOp = ->
 
-  class IDList
-    constructor: ->
-      @length = 0
-      id2index = {}
-      count = 0
-      allocator = ->
-        "#{count++}"
-      initializer = (id) =>
-        id2index[id] = @length
-        @[@length] = id
-        @length += 1
-      deallocator = (id) =>
-        @length -= 1
-        index = id2index[id]
-        swap = @[@length]
-        @[@length] = @[index]
-        @[index] = swap
-        id2index[swap] = index
-      @pool = new SimplePool(allocator, initializer, deallocator)
+  constructor: ->
+    @id2entity = this
+    @id2index = {}
+    @entities = this
+    @length = 0
 
-    create: ->
-      @pool.create()
+  create: ->
+    entity = EntityManager.Entity.create()
+    @id2entity[entity.id] = entity
 
-    release: (id) ->
-      @pool.release(id)
+    @id2index[entity.id] = @length
+    @entities[@length] = entity.id
+    @length += 1
 
-  constructor: (@repository = EntityManager) ->
-    @id2info = this
-    @ids = new IDList()
+    for fn in arguments
+      fn(entity)
 
-    allocator = ->
-      {}
-    initializer = (container, [template]) =>
-      container._template = template
-      for key, component of template
-        value = if component.create
-          component.create()
-        else
-          component
-        container[key] = value
-    deallocator = (container) ->
-      for key, component of container._template
-        component.release(container[key]) if component.release
-        container[key] = undefined
-    @info = new SimplePool(allocator, initializer, deallocator)
-
-  create: (typeName, fn = NoOp) ->
-    unless @repository[typeName]
-      throw new Error("unknown entity type: #{typeName}")
-    id = @ids.create()
-    info = @info.create(@repository[typeName])
-    @id2info[id] = info
-    fn(info)
-    id
+    entity.id
 
   release: (id) ->
-    unless @id2info[id]
+    if @id2entity[id] is undefined
       throw new Error("entity #{id} does not exist")
-    @ids.release(id)
-    @info.release(@id2info[id])
-    @id2info[id] = null
+
+    EntityManager.Entity.release(@id2entity[id])
+    @id2entity[id] = undefined
+
+    @length -= 1
+    index = @id2index[id]
+    otherID = @[@length]
+    @[@length] = @[index]
+    @[index] = otherID
+    @id2index[otherID] = index
+    @id2index[id] = @length
 
   withComponents: ->
     results = {}
-    for id in @ids
-      info = @id2info[id]
+    for id in @entities
+      entity = @id2entity[id]
       broke = false
       for component in arguments
-        if info[component] is undefined
+        if entity[component] is undefined
           broke = true
           break
-      results[id] = info unless broke
+      results[id] = entity unless broke
     results

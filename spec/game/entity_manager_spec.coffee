@@ -2,104 +2,115 @@ describe "EntityManager", ->
   type = "SomeType"
 
   beforeEach ->
-    @repository = {}
-    @repository[type] = {}
-    @entities = new EntityManager(@repository)
+    @entities = new EntityManager()
+
+  it "can create new entities", ->
+    a = @entities.create()
+    b = @entities.create()
+    expect(a).not.to.equal(b)
+
+  it "can re-use old entities", ->
+    a = @entities.create()
+    @entities.release(a)
+    b = @entities.create()
+    expect(a).to.equal(b)
+
+  it "can look up entities by ID", ->
+    a = @entities.create()
+    expect(@entities[a].id).to.equal(a)
+
+  it "can iterate over live entities", ->
+    toArray = (entities) =>
+      id for id in entities
+
+    a = @entities.create()
+    expect(toArray(@entities)).to.have.members([a])
+    b = @entities.create()
+    expect(toArray(@entities)).to.have.members([a, b])
+    c = @entities.create()
+    expect(toArray(@entities)).to.have.members([a, b, c])
+    d = @entities.create()
+    expect(toArray(@entities)).to.have.members([a, b, c, d])
+    @entities.release(b)
+    expect(toArray(@entities)).to.have.members([a, d, c])
+    e = @entities.create()
+    expect(toArray(@entities)).to.have.members([a, d, c, b])
+
+  describe "Entity", ->
+    describe "#addComponent", ->
+      it "creates a component with the given name"
+      it "raises an error if the component has already been added"
+
+    describe "#removeComponent", ->
+      it "releases the component with the given name"
 
   describe "#create()", ->
-    it "initializes the new entity with the passed-in function", ->
-      pool =
-        create: -> { someValue: 1 }
-      @repository[type] = { SomeComponent: pool }
+    it "allows easy initialization through one or more callbacks", ->
+      a = null
+      id = @entities.create(((entity) -> a = entity))
+      expect(@entities[id]).to.equal(a)
 
-      a = @entities.create type, (info) ->
-        info["SomeComponent"].someValue += 1
-      b = @entities.create(type, (info) ->)
+      b = null
+      c = null
+      id = @entities.create(((entity) -> b = entity), ((entity) -> c = entity))
+      expect(@entities[id]).to.equal(b)
+      expect(@entities[id]).to.equal(c)
 
-      expect(@entities[a]["SomeComponent"].someValue).to.equal(2)
-      expect(@entities[b]["SomeComponent"].someValue).to.equal(1)
+  describe "#release()", ->
+    it "releases all entity components", ->
+      fakeComponent = { create: (-> {}), release: (->) }
+      mock = sinon.mock(fakeComponent)
 
-    it "creates new entities when there are none to be reused", ->
-      a = @entities.create(type)
-      b = @entities.create(type)
-      expect(a).not.to.equal(b)
+      id = @entities.create (entity) ->
+        entity.addComponent("position", fakeComponent)
+        entity.addComponent("velocity", fakeComponent)
+      entity = @entities[id]
 
-    it "re-uses entities", ->
-      a = @entities.create(type)
-      @entities.release(a)
-      b = @entities.create(type)
-      expect(a).to.equal(b)
-
-    it "throws an error when creating an unknown entity type", ->
-      expect(=> @entities.create()).to.throw(/unknown entity type/)
-
-    it "creates components on entity creation", ->
-      pool =
-        create: (->)
-      @repository[type] = { position: pool }
-
-      mock = sinon.mock(pool)
-      mock.expects("create").twice().withExactArgs().on(pool)
-
-      a = @entities.create(type)
-      b = @entities.create(type)
-
+      expectA = mock.expects("release").withExactArgs(entity["position"]).on(fakeComponent)
+      expectB = mock.expects("release").withExactArgs(entity["velocity"]).on(fakeComponent)
+      @entities.release(id)
       mock.verify()
+      sinon.assert.callOrder(expectA, expectB)
 
-    it "releases components on entity release", ->
-      objA = { A: "" }
-      objB = { B: "" }
-      objs = [objB, objA]
-      pool = create: (-> objs.pop()), release: (->)
-      @repository[type] = { position: pool }
-
-      a = @entities.create(type)
-      b = @entities.create(type)
-      mock = sinon.mock(pool)
-      mockA = mock.expects("release").withExactArgs(objA).on(pool)
-      mockB = mock.expects("release").withExactArgs(objB).on(pool)
-
-      @entities.release(a)
-      @entities.release(b)
-
-      mock.verify()
-      sinon.assert.callOrder(mockA, mockB)
-
-    it "allows lookup of entities", ->
-      position = {}
-      pool = create: (-> position), release: (->)
-      @repository[type] = { position: pool }
-
-      a = @entities.create(type)
-      expect(@entities[a].position).to.equal(position)
-      @entities.release(a)
-      expect(@entities[a]).to.equal(null)
+    it "raises an error if the entity does not exist", ->
+      expect(=> @entities.release("bogus")).to.throw(/bogus does not exist/)
 
   describe "#withComponents", ->
     it "finds all entities containing all specified components", ->
-      @repository["A"] = { SoComponent: true }
-      @repository["B"] = { SoComponent: true, SuchComponent: true }
-      @repository["C"] = { SoComponent: true, SuchComponent: true, AmazeComponent: true }
-      @repository["D"] = { SuchComponent: true, AmazeComponent: true }
-      @repository["E"] = { AmazeComponent: true }
+      fakeComponent = { create: (-> {}), release: (->) }
 
-      a = @entities.create("A")
-      b = @entities.create("B")
-      c = @entities.create("C")
-      d = @entities.create("D")
-      e = @entities.create("E")
+      a = @entities.create (entity) ->
+        entity.addComponent("SoComponent", fakeComponent)
+
+      b = @entities.create (entity) ->
+        entity.addComponent("SoComponent", fakeComponent)
+        entity.addComponent("SuchComponent", fakeComponent)
+
+      c = @entities.create (entity) ->
+        entity.addComponent("SoComponent", fakeComponent)
+        entity.addComponent("SuchComponent", fakeComponent)
+        entity.addComponent("AmazeComponent", fakeComponent)
+
+      d = @entities.create (entity) ->
+        entity.addComponent("SuchComponent", fakeComponent)
+        entity.addComponent("AmazeComponent", fakeComponent)
+
+      e = @entities.create (entity) ->
+        entity.addComponent("AmazeComponent", fakeComponent)
 
       expect(@entities.withComponents("SoComponent", "SuchComponent")).to.have.keys(b.toString(), c.toString())
       expect(@entities.withComponents("SoComponent")).to.have.keys(a.toString(), b.toString(), c.toString())
       expect(@entities.withComponents("SoComponent", "SuchComponent", "AmazeComponent")).to.have.keys(c.toString())
 
     it "does not find entities with re-used component infos", ->
-      @repository["such"] = { such: true }
-      @repository["wow"] = { wow: true }
+      fakeComponent = { create: (-> {}), release: (->) }
 
-      a = @entities.create("such")
+      a = @entities.create (entity) ->
+        entity.addComponent("such", fakeComponent)
       @entities.release(a)
-      b = @entities.create("wow")
+      b = @entities.create (entity) ->
+        entity.addComponent("wow", fakeComponent)
+
       expect(@entities[a]).to.equal(@entities[b])
 
       expect(@entities.withComponents("such")).to.be.empty

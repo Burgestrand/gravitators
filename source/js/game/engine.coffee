@@ -8,7 +8,7 @@
 
 class @Engine
   constructor: ->
-    @entities = new EntityManager(Entities)
+    @entities = new EntityManager
     @systemManager = new SystemManager(this)
     @systems = @systemManager.systems
     @loop = new Loop(@update.bind(this))
