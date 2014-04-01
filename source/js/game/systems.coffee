@@ -2,9 +2,7 @@
 #= require_directory ./systems
 
 class @System
-  constructor: ->
-
-  setup: (@engine) ->
+  attached: (@engine) ->
 
   update: (delta) ->
 
