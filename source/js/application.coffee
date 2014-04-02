@@ -10,6 +10,7 @@ document.addEventListener "DOMContentLoaded", =>
   engine.renderer.appendTo(document.body)
 
   engine.attach("maneuvering", new Systems.Maneuvering(key))
+  engine.attach("gravity", new Systems.Gravity(vec2.fromValues(0, -0.02)))
   engine.attach("impulse", new Systems.Impulse)
 
   engine.attach("movement", new Systems.Movement)
@@ -43,5 +44,13 @@ document.addEventListener "DOMContentLoaded", =>
   engine.entities.create Entities.Player, Entities.PlayerBControls, (entity) ->
     entity["model"].color = "blue"
     vec2.set(entity["position"], (Math.random() * 640) - 320, Math.random() * 320)
+
+  # creator = ->
+  #   engine.entities.create Entities.Bullet, (entity) ->
+  #     vec2.set(entity["velocity"], 0, (0.6 + Math.random() * 2) * -1)
+  #     entity["model"].radius = 2 * vec2.squaredLength(entity["velocity"])
+  #     vec2.set(entity["position"], (Math.random() * 640) - 320, Math.random() * 320)
+
+  # setInterval(creator, 10)
 
   @engine = engine
