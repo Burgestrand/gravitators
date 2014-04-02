@@ -1,20 +1,12 @@
 class Systems.TerminalVelocity extends System
   constructor: (@terminalVelocity) ->
-    @negativeTerminalVelocity = vec2.create()
-    vec2.negate(@negativeTerminalVelocity, @terminalVelocity)
+    @squaredTerminalVelocity = @terminalVelocity * @terminalVelocity
+    @origo = vec2.fromValues(0, 0)
 
   update: ->
     for id, entity of @engine.entities.withComponents("velocity")
       { velocity } = entity
 
-      if velocity[0] > @terminalVelocity[0]
-        velocity[0] = @terminalVelocity[0]
-
-      if velocity[0] < @negativeTerminalVelocity[0]
-        velocity[0] = @negativeTerminalVelocity[0]
-
-      if velocity[1] > @terminalVelocity[1]
-        velocity[1] = @terminalVelocity[1]
-
-      if velocity[1] < @negativeTerminalVelocity[1]
-        velocity[1] = @negativeTerminalVelocity[1]
+      squaredLength = vec2.squaredLength(velocity)
+      if squaredLength > @squaredTerminalVelocity
+        vec2.lerp(velocity, velocity, @origo, 1 - (@squaredTerminalVelocity / squaredLength))

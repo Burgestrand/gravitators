@@ -12,7 +12,7 @@ document.addEventListener "DOMContentLoaded", =>
   engine.attach("maneuvering", new Systems.Maneuvering(key))
   engine.attach("gravity", new Systems.Gravity(vec2.fromValues(0, -0.02)))
   engine.attach("impulse", new Systems.Impulse)
-  engine.attach("terminalVelocity", new Systems.TerminalVelocity(vec2.fromValues(3, 3)))
+  engine.attach("terminalVelocity", new Systems.TerminalVelocity(4))
 
   engine.attach("movement", new Systems.Movement)
   engine.attach("collisions", new Systems.Collisions(640, 640))
