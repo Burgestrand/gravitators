@@ -1,6 +1,7 @@
 class Systems.Collisions extends System
+  constructor: (@width, @height) ->
+
   update: ->
-    { width, height } = @engine.systems["rendering"]
     boundingSphere = { radius: null }
 
     for id, info of @engine.entities.withComponents("position", "model")
@@ -21,6 +22,6 @@ class Systems.Collisions extends System
       y = position[1]
       radius = boundingSphere.radius
 
-      if (x + radius) > (width / 2) || (x - radius) < -(width / 2) || (y + radius) > (height / 2) || (y - radius) < -(height / 2)
+      if (x + radius) > (@width / 2) || (x - radius) < -(@width / 2) || (y + radius) > (@height / 2) || (y - radius) < -(@height / 2)
         @engine.entities.release(id)
-        console.log("Crash!")
+        # console.log("Crash!")

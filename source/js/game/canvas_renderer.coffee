@@ -1,5 +1,5 @@
-class Systems.Rendering extends System
-  constructor: (@width, @height) ->
+class @CanvasRenderer
+  constructor: (@engine, @width, @height) ->
     @canvas = document.createElement("canvas")
     @canvas.width = @width
     @canvas.height = @height
@@ -16,7 +16,7 @@ class Systems.Rendering extends System
     op = vec2.fromValues(1, -1)
     @drawing.scale(op)
 
-  draw: =>
+  update: (delta) ->
     @drawing.clear()
 
     for id, info of @engine.entities.withComponents("position", "model")
@@ -41,8 +41,3 @@ class Systems.Rendering extends System
 
       @context.closePath()
       @drawing.restore()
-
-    @_draw = null
-
-  update: (delta) ->
-    @_draw or= requestAnimationFrame(@draw)

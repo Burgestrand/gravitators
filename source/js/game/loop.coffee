@@ -1,18 +1,27 @@
 class @Loop
-  constructor: (@update) ->
-    @fps = 60
+  constructor: (@updatesPerSecond, @update, @render) ->
+    @timestep = 1000 / @updatesPerSecond
 
-  start: (fps = @fps) ->
-    @fps = fps
-    delta = 0
+  start: ->
+    lag = 0
     previous = performance.now()
     update = =>
       now = performance.now()
-      delta = now - previous
+      lag += now - previous
       previous = now
-      @update(delta)
-    @running = setInterval(update, 1000 / fps)
+      while lag >= @timestep
+        @update(@timestep)
+        lag -= @timestep
+
+    renderer = =>
+      @render()
+      requestAnimationFrame(renderer)
+
+    @updater = setInterval(update, @timestep)
+    @renderer = requestAnimationFrame(renderer)
+    @running = true
 
   stop: ->
     clearInterval(@running)
+    cancelAnimationFrame(@renderer)
     @running = false

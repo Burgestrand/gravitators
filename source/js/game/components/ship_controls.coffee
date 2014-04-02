@@ -5,8 +5,8 @@ allocator = ->
     left: null,
     right: null,
     shoot: null,
-    accelerationSpeed: 40,
-    rotationSpeed: Math.deg2rad(10),
+    accelerationSpeed: 0.1,
+    rotationSpeed: Math.deg2rad(2),
   }
 initializer = (controls, [config]) ->
   Object.update(controls, config)

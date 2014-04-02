@@ -6,11 +6,14 @@
 
 document.addEventListener "DOMContentLoaded", =>
   engine = new Engine()
-  engine.attach("maneuvering", new Systems.Maneuvering(key), fps: 120)
-  engine.attach("movement", new Systems.Movement, fps: 120)
-  engine.attach("collisions", new Systems.Collisions, fps: 120)
-  engine.attach("rendering", new Systems.Rendering(640, 640))
-  engine.systems["rendering"].appendTo(document.body)
+  engine.renderer = new CanvasRenderer(engine, 640, 640)
+  engine.renderer.appendTo(document.body)
+
+  engine.attach("maneuvering", new Systems.Maneuvering(key))
+  engine.attach("impulse", new Systems.Impulse)
+
+  engine.attach("movement", new Systems.Movement)
+  engine.attach("collisions", new Systems.Collisions(640, 640))
 
   key "p", (event) ->
     event.preventDefault()
@@ -32,12 +35,12 @@ document.addEventListener "DOMContentLoaded", =>
   document.addEventListener "mozvisibilitychange", playpause
   document.addEventListener "msvisibilitychange", playpause
 
-  id = engine.entities.create Entities.Player, Entities.PlayerAControls, (entity) ->
+  engine.entities.create Entities.Player, Entities.PlayerAControls, (entity) ->
     entity["model"].color = "red"
     entity["rotationSpeed"] = Math.PI
     vec2.set(entity["position"], (Math.random() * 640) - 320, Math.random() * 320)
 
-  id = engine.entities.create Entities.Player, Entities.PlayerBControls, (entity) ->
+  engine.entities.create Entities.Player, Entities.PlayerBControls, (entity) ->
     entity["model"].color = "blue"
     vec2.set(entity["position"], (Math.random() * 640) - 320, Math.random() * 320)
 

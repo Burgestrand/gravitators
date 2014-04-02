@@ -3,15 +3,15 @@
 #= require ./entities
 #= require ./entity_manager
 #= require ./systems
-#= require ./system_manager
+#= require ./canvas_renderer
 #= require ./loop
 
 class @Engine
   constructor: ->
     @entities = new EntityManager
-    @systemManager = new SystemManager(this)
-    @systems = @systemManager.systems
-    @loop = new Loop(@update.bind(this))
+    @systems = {}
+    @systemsOrder = []
+    @loop = new Loop(updatesPerSecond = 100, @update.bind(this), @render.bind(this))
 
   start: ->
     @loop.start()
@@ -21,8 +21,16 @@ class @Engine
     @loop.stop()
     @running = false
 
-  attach: (name, system, options = {}) ->
-    @systemManager.register(name, system, options)
+  attach: (name, system) ->
+    if @systems[name]
+      throw new Error("system #{name} already registered!")
+    @systemsOrder.push(system.update.bind(system))
+    @systems[name] = system
+    system.attached(this)
 
   update: (delta) ->
-    @systemManager.update(delta)
+    update() for update in @systemsOrder
+    undefined
+
+  render: (delta) ->
+    @renderer?.update(delta)
