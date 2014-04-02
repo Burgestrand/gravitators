@@ -21,11 +21,12 @@ class EntityManager.Entity
     @id or= "Entity-#{count++}"
     @components or= {}
 
-  addComponent: (name, component) ->
+  addComponent: ->
+    [name, component] = Array::splice.call(arguments, 0, 2)
     if @components[name] isnt undefined
       throw new Error("component #{name} already exists")
     @components[name] = component
-    @[name] = component.create()
+    @[name] = component.create.apply(component, arguments)
 
   removeComponent: (name) ->
     if component = @components[name]

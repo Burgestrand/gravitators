@@ -61,6 +61,15 @@ describe "EntityManager", ->
         expect(@entity.position).to.equal(objA)
         expect(@entity.velocity).to.equal(objB)
 
+      it "passes extraneous arguments to the component initializer", ->
+        args = null
+        fakeComponent = { create: (-> args = Array::slice.call(arguments)) }
+
+        obj = {}
+        @entity.addComponent("position", fakeComponent, 1, 2, obj)
+
+        expect(args).to.have.members([1, 2, obj])
+
       it "raises an error if the component has already been added", ->
         fakeComponent = { create: (->) }
 
