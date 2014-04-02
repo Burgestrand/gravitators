@@ -23,15 +23,15 @@ class EntityManager.Entity
 
   addComponent: (name, component) ->
     if @components[name] isnt undefined
-      throw new Error("component #{name} already added!")
+      throw new Error("component #{name} already exists")
     @components[name] = component
     @[name] = component.create()
 
   removeComponent: (name) ->
-    component = @components[name]
-    component.release(@[name])
-    @[name] = undefined
-    @components[name] = undefined
+    if component = @components[name]
+      component.release(@[name])
+      @[name] = undefined
+      @components[name] = undefined
 
   deallocate: ->
     for name, klass of @components when klass

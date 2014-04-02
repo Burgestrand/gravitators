@@ -12,6 +12,7 @@
     "mocha"         : "*",
     "chai"          : "*",
     "sinon"         : "*",
+    "sinon-chai"    : "*",
     "source-map"    : "*",
     "coffee-errors" : "*"
   },

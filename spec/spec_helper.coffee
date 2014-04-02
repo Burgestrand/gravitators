@@ -1,4 +1,3 @@
-sinon = require "sinon"
 sourcemap = require "source-map"
 fs = require "fs"
 vm = require "vm"
@@ -22,8 +21,10 @@ Error.prepareStackTrace = (error, stack) ->
     { source, line, column, name } = sourceMaps[file].originalPositionFor(line: parseInt(line), column: parseInt(column))
     "#{match} [#{source}:#{line}:#{column}]"
 
+sinon = require "sinon"
 chai = require "chai"
 chai.expect()
+chai.use require("sinon-chai")
 
 beforeEach ->
   root.sinon = sinon

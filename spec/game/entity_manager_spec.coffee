@@ -37,12 +37,57 @@ describe "EntityManager", ->
     expect(toArray(@entities)).to.have.members([a, d, c, b])
 
   describe "Entity", ->
+    beforeEach ->
+      @id = @entities.create()
+      @entity = @entities[@id]
+
     describe "#addComponent", ->
-      it "creates a component with the given name"
-      it "raises an error if the component has already been added"
+      it "creates and attaches a new component to the entity", ->
+        objA = {}
+        objAComponent = { create: (-> objA) }
+        objB = {}
+        objBComponent = { create: (-> objB) }
+
+        spyA = sinon.spy(objAComponent, "create")
+        spyB = sinon.spy(objBComponent, "create")
+
+        @entity.addComponent("position", objAComponent)
+        @entity.addComponent("velocity", objBComponent)
+
+        expect(spyA).to.have.been.calledOnce
+        expect(spyB).to.have.been.calledOnce
+        expect(spyB).to.have.been.calledAfter(spyA)
+
+        expect(@entity.position).to.equal(objA)
+        expect(@entity.velocity).to.equal(objB)
+
+      it "raises an error if the component has already been added", ->
+        fakeComponent = { create: (->) }
+
+        @entity.addComponent("position", fakeComponent)
+        expect(=> @entity.addComponent("position", fakeComponent)).to.throw(/position already exists/)
 
     describe "#removeComponent", ->
-      it "releases the component with the given name"
+      it "releases the component with the given name", ->
+        obj = {}
+        aComponent = { create: (-> obj), release: ((obj) ->) }
+        spyCreate = sinon.spy(aComponent, "create")
+        spyRelease = sinon.spy(aComponent, "release")
+
+        @entity.addComponent("position", aComponent)
+        expect(@entity.position).to.equal(obj)
+
+        @entity.removeComponent("position")
+        @entity.addComponent("velocity", aComponent)
+
+        expect(@entity.velocity).to.equal(obj)
+
+        expect(spyCreate).to.have.been.calledTwice
+        expect(spyRelease).to.have.been.calledOnce
+        expect(spyRelease).to.always.have.been.calledWithExactly(obj)
+
+      it "does nothing if the component does not exist", ->
+        @entity.removeComponent("idonotexist")
 
   describe "#create()", ->
     it "allows easy initialization through one or more callbacks", ->
@@ -59,18 +104,20 @@ describe "EntityManager", ->
   describe "#release()", ->
     it "releases all entity components", ->
       fakeComponent = { create: (-> {}), release: (->) }
-      mock = sinon.mock(fakeComponent)
 
       id = @entities.create (entity) ->
         entity.addComponent("position", fakeComponent)
         entity.addComponent("velocity", fakeComponent)
       entity = @entities[id]
+      { position, velocity } = entity
 
-      expectA = mock.expects("release").withExactArgs(entity["position"]).on(fakeComponent)
-      expectB = mock.expects("release").withExactArgs(entity["velocity"]).on(fakeComponent)
+      spy = sinon.spy(fakeComponent, "release")
+
       @entities.release(id)
-      mock.verify()
-      sinon.assert.callOrder(expectA, expectB)
+
+      expect(spy).to.have.been.calledTwice
+      expect(spy).to.have.been.calledWithExactly(position)
+      expect(spy).to.have.been.calledWithExactly(velocity)
 
     it "raises an error if the entity does not exist", ->
       expect(=> @entities.release("bogus")).to.throw(/bogus does not exist/)
