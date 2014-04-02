@@ -1,16 +1,24 @@
-createModel = (type) ->
-  { type: type, color: "black" }
+class Shape
+  constructor: ->
+    @color = "black"
+    @type = @constructor.name.toLowerCase()
 
-circleAllocator = ->
-  createModel("circle")
-circleInitializer = (model, [radius]) ->
-  model.radius = radius or 1
+class Circle extends Shape
+  constructor: (@radius = 1) ->
+    @boundingSphere = this
+    super()
 
-ship = [-3, 0, -9, 9, 12, 0, -9, -9, -3, 0]
-polygonAllocator = ->
-  createModel("polygon")
-polygonInitializer = (model) ->
-  model.points = ship
+class Polygon extends Shape
+  constructor: (@points = [-3, 0, -9, 9, 12, 0, -9, -9, -3, 0]) ->
+    squaredRadius = 0
+    vec2.forEach @points, null, null, null, (v) ->
+      squaredLength = vec2.squaredLength(v)
+      squaredRadius = squaredLength if squaredLength > squaredRadius
+    @boundingSphere = Components.Circle.create(Math.sqrt(squaredRadius))
+    super()
 
-Components.Circle  = new SimplePool(circleAllocator, circleInitializer)
-Components.Polygon = new SimplePool(polygonAllocator, polygonInitializer)
+  deallocate: ->
+    Components.Circle.release(@boundingSphere)
+
+Components.Circle  = new ClassPool(Circle)
+Components.Polygon = new ClassPool(Polygon)
