@@ -13,7 +13,10 @@
   Bullet: (entity) ->
     entity.addComponent "position", Components.Vector
     entity.addComponent "velocity", Components.Vector
+    entity.addComponent "ttl",      Components.Number
     entity.addComponent "model",    Components.Circle
+
+    entity.ttl = 200
 
   PlayerAControls: (entity) ->
     entity.addComponent "controls", Components.ShipControls,
