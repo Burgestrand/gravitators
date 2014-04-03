@@ -14,6 +14,7 @@ document.addEventListener "DOMContentLoaded", =>
   # engine.attach("gravity", new Systems.Gravity(vec2.fromValues(0, -0.008)))
   engine.attach("impulse", new Systems.Impulse)
   engine.attach("terminalVelocity", new Systems.TerminalVelocity)
+  engine.attach("weaponControls", new Systems.WeaponControls(key))
 
   engine.attach("movement", new Systems.Movement)
   engine.attach("collisions", new Systems.Collisions(640, 640))

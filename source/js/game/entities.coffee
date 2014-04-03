@@ -6,6 +6,7 @@
     entity.addComponent "impulse",  Components.Vector
     entity.addComponent "rotation", Components.Number
     entity.addComponent "gravity",  Components.Empty
+    entity.addComponent "weapon",   Components.Weapon
     entity.addComponent "model",    Components.Polygon
 
     entity.terminalVelocity = 1.6
@@ -24,6 +25,7 @@
       retardate: "s"
       left: "a"
       right: "d"
+      shoot: "space"
 
   PlayerBControls: (entity) ->
     entity.addComponent "controls", Components.ShipControls,
@@ -31,3 +33,4 @@
       retardate: "down"
       left: "left"
       right: "right"
+      shoot: "enter"
