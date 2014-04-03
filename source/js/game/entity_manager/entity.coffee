@@ -34,6 +34,12 @@ class EntityManager.Entity
       @[name] = undefined
       @components[name] = undefined
 
+  hasComponents: (components) ->
+    for component in components
+      if @[component] is undefined
+        return false
+    true
+
   deallocate: ->
     for name, klass of @components when klass
       @removeComponent(name)

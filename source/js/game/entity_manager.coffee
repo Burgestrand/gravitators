@@ -42,10 +42,6 @@ class @EntityManager
     results = []
     for id in @entities
       entity = @id2entity[id]
-      broke = false
-      for component in arguments
-        if entity[component] is undefined
-          broke = true
-          break
-      results.push(entity) unless broke
+      if entity.hasComponents(arguments)
+        results.push(entity)
     results
