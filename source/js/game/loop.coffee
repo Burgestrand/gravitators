@@ -13,8 +13,10 @@ class @Loop
         @update(@timestep)
         lag -= @timestep
 
-    renderer = =>
-      @render()
+    renderer = (now) =>
+      delta = (performance.now() - previous) % @timestep
+      bleed = delta / @timestep
+      @render(bleed)
       requestAnimationFrame(renderer)
 
     @updater = setInterval(update, @timestep)

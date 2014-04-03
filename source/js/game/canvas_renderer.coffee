@@ -5,6 +5,7 @@ class @CanvasRenderer
     @canvas.height = @height
     @drawing = new CanvasAPI(@canvas)
     @context = @drawing.context
+    @vector = vec2.create()
 
   appendTo: (node) ->
     node.appendChild(@canvas)
@@ -19,11 +20,12 @@ class @CanvasRenderer
   update: (delta) ->
     @drawing.clear()
 
-    for id, info of @engine.entities.withComponents("position", "model")
-      { position, rotation, model } = info
+    for id, info of @engine.entities.withComponents("position", "velocity", "model")
+      { position, velocity, rotation, model } = info
 
       @drawing.save()
-      @drawing.translate(position)
+      vec2.scaleAndAdd(@vector, position, velocity, delta)
+      @drawing.translate(@vector)
       @drawing.rotate(rotation) if rotation
       @context.beginPath()
 
