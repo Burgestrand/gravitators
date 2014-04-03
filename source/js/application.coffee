@@ -41,7 +41,6 @@ document.addEventListener "DOMContentLoaded", =>
 
   engine.entities.create Entities.Player, Entities.PlayerAControls, (entity) ->
     entity["model"].color = "red"
-    entity["rotationSpeed"] = Math.PI
     vec2.set(entity["position"], (Math.random() * 640) - 320, Math.random() * 320)
 
   engine.entities.create Entities.Player, Entities.PlayerBControls, (entity) ->
