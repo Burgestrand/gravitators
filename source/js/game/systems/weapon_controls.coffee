@@ -3,7 +3,7 @@ class Systems.WeaponControls extends System
     @vector = vec2.create()
 
   update: ->
-    for id, entity of @engine.entities.withComponents("weapon", "controls", "rotation", "velocity", "position", "model")
+    for entity in @engine.entities.withComponents("weapon", "controls", "rotation", "velocity", "position", "model")
       { weapon, controls, rotation, velocity, position, model } = entity
 
       weapon.cooldown -= 1 if weapon.cooldown

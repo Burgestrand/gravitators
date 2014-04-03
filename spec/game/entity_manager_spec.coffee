@@ -132,6 +132,11 @@ describe "EntityManager", ->
       expect(=> @entities.release("bogus")).to.throw(/bogus does not exist/)
 
   describe "#withComponents", ->
+    beforeEach ->
+      @lookup = (ids...) =>
+        @entities[id] for id in ids
+
+
     it "finds all entities containing all specified components", ->
       fakeComponent = { create: (-> {}), release: (->) }
 
@@ -154,9 +159,9 @@ describe "EntityManager", ->
       e = @entities.create (entity) ->
         entity.addComponent("AmazeComponent", fakeComponent)
 
-      expect(@entities.withComponents("SoComponent", "SuchComponent")).to.have.keys(b.toString(), c.toString())
-      expect(@entities.withComponents("SoComponent")).to.have.keys(a.toString(), b.toString(), c.toString())
-      expect(@entities.withComponents("SoComponent", "SuchComponent", "AmazeComponent")).to.have.keys(c.toString())
+      expect(@entities.withComponents("SoComponent", "SuchComponent")).to.have.members(@lookup(b, c))
+      expect(@entities.withComponents("SoComponent")).to.have.members(@lookup(a, b, c))
+      expect(@entities.withComponents("SoComponent", "SuchComponent", "AmazeComponent")).to.have.members(@lookup(c))
 
     it "does not find entities with re-used component infos", ->
       fakeComponent = { create: (-> {}), release: (->) }
@@ -170,4 +175,4 @@ describe "EntityManager", ->
       expect(@entities[a]).to.equal(@entities[b])
 
       expect(@entities.withComponents("such")).to.be.empty
-      expect(@entities.withComponents("wow")).to.have.keys(b.toString())
+      expect(@entities.withComponents("wow")).to.have.members(@lookup(b))

@@ -39,7 +39,7 @@ class @EntityManager
     @id2index[id] = @length
 
   withComponents: ->
-    results = {}
+    results = []
     for id in @entities
       entity = @id2entity[id]
       broke = false
@@ -47,5 +47,5 @@ class @EntityManager
         if entity[component] is undefined
           broke = true
           break
-      results[id] = entity unless broke
+      results.push(entity) unless broke
     results

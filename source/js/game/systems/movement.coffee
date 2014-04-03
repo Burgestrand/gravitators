@@ -2,7 +2,5 @@ class Systems.Movement extends System
   constructor: ->
 
   update: ->
-    for id, entity of @engine.entities.withComponents("position", "velocity")
-      { position, velocity } = entity
-
+    for { position, velocity } in @engine.entities.withComponents("position", "velocity")
       vec2.add(position, position, velocity)

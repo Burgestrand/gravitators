@@ -3,9 +3,7 @@ class Systems.TerminalVelocity extends System
     @origo = vec2.fromValues(0, 0)
 
   update: ->
-    for id, entity of @engine.entities.withComponents("terminalVelocity", "velocity")
-      { velocity, terminalVelocity } = entity
-
+    for { velocity, terminalVelocity } in @engine.entities.withComponents("terminalVelocity", "velocity")
       squaredLength = vec2.length(velocity)
       squaredTerminalVelocity = terminalVelocity * terminalVelocity
       if squaredLength > squaredTerminalVelocity

@@ -3,7 +3,7 @@ class Systems.Maneuvering extends System
     @force = vec2.create()
 
   update: ->
-    for id, entity of @engine.entities.withComponents("impulse", "rotation", "controls")
+    for entity in @engine.entities.withComponents("impulse", "rotation", "controls")
       { controls, impulse, rotation } = entity
 
       if @input.isPressed(controls.accelerate)

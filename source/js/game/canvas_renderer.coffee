@@ -20,9 +20,7 @@ class @CanvasRenderer
   update: (delta) ->
     @drawing.clear()
 
-    for id, info of @engine.entities.withComponents("position", "velocity", "model")
-      { position, velocity, rotation, model } = info
-
+    for { position, velocity, rotation, model } in @engine.entities.withComponents("position", "velocity", "model")
       @drawing.save()
       vec2.scaleAndAdd(@vector, position, velocity, delta)
       @drawing.translate(@vector)

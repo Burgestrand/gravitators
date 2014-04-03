@@ -2,7 +2,5 @@ class Systems.Gravity extends System
   constructor: (@gravity) ->
 
   update: ->
-    for id, entity of @engine.entities.withComponents("impulse", "gravity")
-      { impulse } = entity
-
+    for { impulse } in @engine.entities.withComponents("impulse", "gravity")
       vec2.add(impulse, impulse, @gravity)
