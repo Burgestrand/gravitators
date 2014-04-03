@@ -8,7 +8,7 @@
     entity.addComponent "gravity",  Components.Empty
     entity.addComponent "model",    Components.Polygon
 
-    entity.terminalVelocity = 2
+    entity.terminalVelocity = 1.6
 
   Bullet: (entity) ->
     entity.addComponent "position", Components.Vector
